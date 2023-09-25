@@ -67,6 +67,7 @@ app.get("/", (_req, res) => {
     uptime: process.uptime(),
     message: "OK",
     timestamp: Date.now(),
+    hello: 'From here'
   });
 });
 
