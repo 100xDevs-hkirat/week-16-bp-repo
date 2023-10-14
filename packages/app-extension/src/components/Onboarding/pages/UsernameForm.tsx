@@ -41,7 +41,7 @@ export const UsernameForm = ({
         setError(err.message);
       }
     },
-    [username]
+    [username, firstName, lastName]
   );
 
   return (
@@ -74,7 +74,7 @@ export const UsernameForm = ({
           marginRight: "16px",
         }}
       >
-        <Box style={{ marginBottom: "16px" }}>
+        <Box style={{ marginBottom: "0px" }}>
           <TextInput
             inputProps={{
               name: "username",
@@ -106,7 +106,7 @@ export const UsernameForm = ({
             }
           />
         </Box>
-        <Box style={{ marginBottom: "2px" }}>
+        <Box style={{ marginBottom: "0px" }}>
           <TextInput
             inputProps={{
               name: "firstname",
@@ -138,7 +138,7 @@ export const UsernameForm = ({
             }
           />
         </Box>
-        <Box style={{ marginBottom: "2px" }}>
+        <Box style={{ marginBottom: "16px" }}>
           <TextInput
             inputProps={{
               name: "lastname",
