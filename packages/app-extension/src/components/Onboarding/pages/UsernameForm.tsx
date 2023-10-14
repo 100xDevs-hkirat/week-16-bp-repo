@@ -10,7 +10,7 @@ export const UsernameForm = ({
   inviteCode,
   onNext,
 }: {
-  inviteCode: string;
+  inviteCode: string;    
   onNext: (username: string, firstName: string, lastName: string) => void;
 }) => {
   const [username, setUsername] = useState("");
@@ -41,7 +41,7 @@ export const UsernameForm = ({
         setError(err.message);
       }
     },
-    [username]
+    [username, firstName, lastName]
   );
 
   return (
