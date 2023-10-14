@@ -24,7 +24,7 @@ import { HardwareOnboard } from "./HardwareOnboard";
 import { InviteCodeForm } from "./InviteCodeForm";
 import { KeyringTypeSelector } from "./KeyringTypeSelector";
 import { NotificationsPermission } from "./NotificationsPermission";
-import { UsernameForm } from "./UsernameForm";
+import { UserForm } from "./UserForm";
 
 export const OnboardAccount = ({
   onRecover,
@@ -74,11 +74,11 @@ export const OnboardAccount = ({
         nextStep();
       }}
     />,
-    <UsernameForm
+    <UserForm
       key="UsernameForm"
       inviteCode={inviteCode!}
-      onNext={(username) => {
-        setOnboardingData({ username });
+      onNext={(username, firstName, lastName) => {
+        setOnboardingData({ username, firstName, lastName });
         nextStep();
       }}
     />,

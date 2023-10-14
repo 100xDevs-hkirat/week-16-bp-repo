@@ -1,19 +1,21 @@
 import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { PrimaryButton,TextInput } from "@coral-xyz/react-common";
+import { PrimaryButton, TextInput } from "@coral-xyz/react-common";
 import { useCustomTheme } from "@coral-xyz/themes";
 import { AlternateEmail } from "@mui/icons-material";
 import { Box, InputAdornment } from "@mui/material";
 
 import { Header, SubtextParagraph } from "../../common";
 
-export const UsernameForm = ({
+export const UserForm = ({
   inviteCode,
   onNext,
 }: {
   inviteCode: string;
-  onNext: (username: string) => void;
+  onNext: (username: string, firstName: string, lastName: string) => void;
 }) => {
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const theme = useCustomTheme();
 
@@ -34,12 +36,12 @@ export const UsernameForm = ({
         const json = await res.json();
         if (!res.ok) throw new Error(json.message || "There was an error");
 
-        onNext(username);
+        onNext(username, firstName, lastName);
       } catch (err: any) {
         setError(err.message);
       }
     },
-    [username]
+    [username, firstName, lastName]
   );
 
   return (
@@ -53,15 +55,13 @@ export const UsernameForm = ({
         justifyContent: "space-between",
       }}
     >
-      <Box style={{ margin: "24px" }}>
+      <Box style={{ margin: "5px" }}>
         <Header text="Claim your username" />
         <SubtextParagraph style={{ margin: "16px 0" }}>
           Others can see and find you by this username, and it will be
           associated with your primary wallet address.
           <br />
-          <br />
           Choose wisely if you'd like to remain anonymous.
-          <br />
           <br />
           Have fun!
         </SubtextParagraph>
@@ -73,7 +73,8 @@ export const UsernameForm = ({
           marginBottom: "16px",
         }}
       >
-        <Box style={{ marginBottom: "16px" }}>
+        {/* username */}
+        <Box style={{ marginBottom: "10px" }}>
           <TextInput
             inputProps={{
               name: "username",
@@ -86,6 +87,72 @@ export const UsernameForm = ({
             value={username}
             setValue={(e) => {
               setUsername(
+                e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
+              );
+            }}
+            error={error ? true : false}
+            errorMessage={error}
+            startAdornment={
+              <InputAdornment position="start">
+                <AlternateEmail
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+        </Box>
+        {/* firstname */}
+        <Box style={{ marginBottom: "10px" }}>
+          <TextInput
+            inputProps={{
+              name: "firstName",
+              autoComplete: "off",
+              spellCheck: "false",
+              autoFocus: true,
+            }}
+            placeholder="First Name"
+            type="text"
+            value={firstName}
+            setValue={(e) => {
+              setFirstName(
+                e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
+              );
+            }}
+            error={error ? true : false}
+            errorMessage={error}
+            startAdornment={
+              <InputAdornment position="start">
+                <AlternateEmail
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+        </Box>
+        {/* lastName */}
+        <Box style={{ marginBottom: "10px" }}>
+          <TextInput
+            inputProps={{
+              name: "lastName",
+              autoComplete: "off",
+              spellCheck: "false",
+              autoFocus: true,
+            }}
+            placeholder="lastName"
+            type="text"
+            value={lastName}
+            setValue={(e) => {
+              setLastName(
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
