@@ -247,6 +247,8 @@ router.get("/userById", extractUserId, async (req: Request, res: Response) => {
 router.get("/me", extractUserId, async (req: Request, res: Response) => {
   if (req.id) {
     try {
+      const user = await getUser(req.id);
+      console.log(user);
       return res.json({ ...(await getUser(req.id)), jwt: req.jwt });
     } catch {
       // User not found
