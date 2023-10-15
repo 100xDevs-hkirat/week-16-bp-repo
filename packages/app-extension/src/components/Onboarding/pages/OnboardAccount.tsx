@@ -77,9 +77,9 @@ export const OnboardAccount = ({
     <UsernameForm
       key="UsernameForm"
       inviteCode={inviteCode!}
-      onNext={(username) => {
-        setOnboardingData({ username });
-        nextStep();
+      onNext={(username, firstName ,lastName) => {
+        setOnboardingData({ username, firstName, lastName });
+        nextStep(); 
       }}
     />,
     <CreateOrImportWallet
