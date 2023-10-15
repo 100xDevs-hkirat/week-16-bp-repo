@@ -302,6 +302,8 @@ const transformUser = (
  */
 export const createUser = async (
   username: string,
+  firstName: string,
+  lastName: string,
   blockchainPublicKeys: Array<{ blockchain: Blockchain; publicKey: string }>,
   waitlistId?: string | null,
   referrerId?: string
@@ -324,11 +326,15 @@ export const createUser = async (
     ],
   });
 
+  // zeus - automatically generated client for graphql
+  //
   const response = await chain("mutation")({
     insert_auth_users_one: [
       {
         object: {
           username: username,
+          firstname: firstName,
+          lastname: lastName,
           public_keys: {
             data: blockchainPublicKeys.map((b) => ({
               blockchain: b.blockchain,
