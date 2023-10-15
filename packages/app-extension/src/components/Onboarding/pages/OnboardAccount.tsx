@@ -77,8 +77,8 @@ export const OnboardAccount = ({
     <UsernameForm
       key="UsernameForm"
       inviteCode={inviteCode!}
-      onNext={(username) => {
-        setOnboardingData({ username });
+      onNext={(username, firstName, lastName) => {
+        setOnboardingData({ username, firstName, lastName });
         nextStep();
       }}
     />,
@@ -100,11 +100,11 @@ export const OnboardAccount = ({
     // Show the seed phrase if we are creating based on a mnemonic
     ...(keyringType === "mnemonic"
       ? [
-        <MnemonicInput
-          key="MnemonicInput"
-          readOnly={action === "create"}
-          buttonLabel={action === "create" ? "Next" : "Import"}
-          onNext={async (mnemonic) => {
+          <MnemonicInput
+            key="MnemonicInput"
+            readOnly={action === "create"}
+            buttonLabel={action === "create" ? "Next" : "Import"}
+            onNext={async (mnemonic) => {
               setOnboardingData({ mnemonic });
               nextStep();
             }}
@@ -124,10 +124,10 @@ export const OnboardAccount = ({
           />,
         ]
       : [
-        <BlockchainSelector
-          key="BlockchainSelector"
-          selectedBlockchains={selectedBlockchains}
-          onClick={async (blockchain) => {
+          <BlockchainSelector
+            key="BlockchainSelector"
+            selectedBlockchains={selectedBlockchains}
+            onClick={async (blockchain) => {
               await handleSelectBlockchain({
                 blockchain,
               });
@@ -138,14 +138,14 @@ export const OnboardAccount = ({
                 setOpenDrawer(true);
               }
             }}
-          onNext={nextStep}
+            onNext={nextStep}
           />,
         ]),
     ...(!isAddingAccount
       ? [
-        <CreatePassword
-          key="CreatePassword"
-          onNext={async (password) => {
+          <CreatePassword
+            key="CreatePassword"
+            onNext={async (password) => {
               setOnboardingData({ password });
               nextStep();
             }}
