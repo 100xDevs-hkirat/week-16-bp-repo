@@ -17,11 +17,22 @@ export const UsernameForm = ({
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
+  const [errorFirstName, setErrorFirstName] = useState("");
+  const [errorLastName, setErrorLastName] = useState("");
+  const [errorIdentity, setErrorIdentity] = useState(0);
   const theme = useCustomTheme();
 
   useEffect(() => {
     setError("");
   }, [username]);
+  //Error for firstname and lastname
+  useEffect(() => {
+    setErrorFirstName("");
+  }, [firstName]);
+
+  useEffect(() => {
+    setErrorLastName("");
+  }, [lastName]);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
@@ -34,11 +45,28 @@ export const UsernameForm = ({
           },
         });
         const json = await res.json();
-        if (!res.ok) throw new Error(json.message || "There was an error");
-
+        if (!res.ok) {
+          setErrorIdentity(1);
+          throw new Error(json.message || "There was an error");
+        }
+        if (!firstName.match(/^[A-Za-z\s'-]+$/)) {
+          setErrorIdentity(2);
+          throw new Error("Invalid characters in name");
+        }
+        if (!lastName.match(/^[A-Za-z\s'-]+$/)) {
+          setErrorIdentity(3);
+          throw new Error("Invalid characters in name");
+        }
         onNext(username, firstName, lastName);
       } catch (err: any) {
-        setError(err.message);
+        if (errorIdentity == 1) {
+          setError(err.message);
+        } else if (errorIdentity == 2) {
+          setErrorFirstName(err.message);
+        } else if (errorIdentity == 3) {
+          setErrorLastName(err.message);
+        }
+        console.log(err.message);
       }
     },
     [username, firstName, lastName]
@@ -123,6 +151,8 @@ export const UsernameForm = ({
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
+            error={errorFirstName ? true : false}
+            errorMessage={errorFirstName}
             // startAdornment={
             //   <InputAdornment position="start">
             //     <AlternateEmail
@@ -153,6 +183,8 @@ export const UsernameForm = ({
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
+            error={errorFirstName ? true : false}
+            errorMessage={errorFirstName}
             // startAdornment={
             //   <InputAdornment position="start">
             //     <AlternateEmail
