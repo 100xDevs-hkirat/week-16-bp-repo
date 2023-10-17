@@ -3,7 +3,7 @@
   "features": {
   },
   "hostRequirements": {
-    "cpus": 4,
+    "cpus": 8,
     "memory": "8gb",
     "storage": "64gb"
   }
