@@ -126,6 +126,14 @@ export const authenticatedUser = atom<{
   default: null,
 });
 
+export const authenticatedUserProfile = atom<{
+  firstName: string;
+  lastName: string;
+} | null>({
+  key: "authenticatedUserProfile",
+  default: null,
+});
+
 export const xnftJwt = atomFamily({
   key: "xnftJwt",
   default: selectorFamily({

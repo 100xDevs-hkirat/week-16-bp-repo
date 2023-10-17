@@ -212,6 +212,8 @@ export const getUser = async (id: string, onlyActiveKeys?: boolean) => {
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
@@ -268,6 +270,8 @@ const transformUser = (
   user: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -279,6 +283,8 @@ const transformUser = (
   return {
     id: user.id,
     username: user.username,
+    firstname: user.firstname,
+    lastname: user.lastname,
     // Camelcase public keys for response
     publicKeys: user.public_keys
       .map((k) => ({
@@ -302,6 +308,8 @@ const transformUser = (
  */
 export const createUser = async (
   username: string,
+  firstName: string,
+  lastName: string,
   blockchainPublicKeys: Array<{ blockchain: Blockchain; publicKey: string }>,
   waitlistId?: string | null,
   referrerId?: string
@@ -329,6 +337,8 @@ export const createUser = async (
       {
         object: {
           username: username,
+          firstname: firstName,
+          lastname: lastName,
           public_keys: {
             data: blockchainPublicKeys.map((b) => ({
               blockchain: b.blockchain,
@@ -484,6 +494,41 @@ export async function updateUserAvatar({
       },
       {
         affected_rows: true,
+      },
+    ],
+  });
+
+  return response.update_auth_users;
+}
+/**
+ * Update profile of a user
+ */
+
+export async function updateUserProfile({
+  userId,
+  firstName,
+  lastName,
+}: {
+  userId: string;
+  firstName: string | null;
+  lastName: string | null;
+}) {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+        _set: {
+          firstname: firstName,
+          lastname: lastName,
+        },
+      },
+      {
+        returning: {
+          firstname: true,
+          lastname: true,
+        },
       },
     ],
   });

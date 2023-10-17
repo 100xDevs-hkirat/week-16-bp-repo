@@ -219,6 +219,8 @@ export const UI_RPC_METHOD_USER_ACCOUNT_AUTH =
 export const UI_RPC_METHOD_USER_ACCOUNT_LOGOUT = "ui-rpc-method-user-logout";
 export const UI_RPC_METHOD_USER_ACCOUNT_READ =
   "ui-rpc-method-user-account-read";
+export const UI_RPC_METHOD_USER_PROFILE_UPDATE =
+  "ui-rpc-method-user-profile-update";
 export const UI_RPC_METHOD_USER_ACCOUNT_PUBLIC_KEY_CREATE =
   "ui-rpc-method-user-account-add-public-create";
 export const UI_RPC_METHOD_USER_ACCOUNT_PUBLIC_KEY_DELETE =
@@ -357,6 +359,8 @@ export const NOTIFICATION_SOLANA_SPL_TOKENS_DID_UPDATE =
   "notification-solana-spl-tokens-did-update";
 export const NOTIFICATION_USER_ACCOUNT_AUTHENTICATED =
   "notification-user-account-authenticated";
+export const NOTIFICATION_USER_PROFILE_UPDATED =
+  "notification-user-profile-updated";
 export const NOTIFICATION_USER_ACCOUNT_PUBLIC_KEYS_UPDATED =
   "notification-user-account-public-keys-updated";
 export const NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED =
@@ -579,7 +583,7 @@ export const ALCHEMY_ETHEREUM_MAINNET_API_KEY =
   "DlJr6QuBC2EaE-L60-iqQQGq9hi9-XSZ";
 
 export const AVATAR_BASE_URL = "https://swr.xnfts.dev/avatars";
-export const BACKEND_API_URL = "https://backpack-api.xnfts.dev";
+export const BACKEND_API_URL = "https://backpack-api.xnfts.dev"; // http://localhost:8080
 export const REALTIME_API_URL = "https://backend-ws.xnfts.dev";
 export const MESSAGING_COMMUNICATION_PUSH = "MESSAGING_COMMUNICATION_PUSH";
 export const MESSAGING_COMMUNICATION_FETCH = "MESSAGING_COMMUNICATION_FETCH";

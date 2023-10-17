@@ -47,6 +47,7 @@ import {
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_DELETED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEYS_UPDATED,
+  NOTIFICATION_USER_PROFILE_UPDATED,
   NOTIFICATION_XNFT_PREFERENCE_UPDATED,
 } from "@coral-xyz/common";
 import type { Commitment } from "@solana/web3.js";
@@ -101,6 +102,9 @@ export function NotificationsProvider(props: any) {
   const setKeyringStoreState = useSetRecoilState(atoms.keyringStoreState);
   const setActiveUser = useSetRecoilState(atoms.user);
   const setAuthenticatedUser = useSetRecoilState(atoms.authenticatedUser);
+  const setAuthenticatedUserProfile = useSetRecoilState(
+    atoms.authenticatedUserProfile
+  );
   const resetAllUsers = useResetRecoilState(atoms.allUsers);
 
   // Preferences.
@@ -333,6 +337,9 @@ export function NotificationsProvider(props: any) {
           break;
         case NOTIFICATION_USER_ACCOUNT_AUTHENTICATED:
           handleUserAccountAuthenticated(notif);
+          break;
+        case NOTIFICATION_USER_PROFILE_UPDATED:
+          handleUserProfile(notif);
           break;
         case NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED:
           handleUserAccountPublicKeyCreated(notif);
@@ -628,6 +635,13 @@ export function NotificationsProvider(props: any) {
         username: notif.data.username,
         uuid: notif.data.uuid,
         jwt: notif.data.jwt,
+      });
+    };
+
+    const handleUserProfile = (notif: Notification) => {
+      setAuthenticatedUserProfile({
+        firstName: notif.data.firstName,
+        lastName: notif.data.lastName,
       });
     };
 

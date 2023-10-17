@@ -1,7 +1,7 @@
 import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { PrimaryButton,TextInput } from "@coral-xyz/react-common";
+import { PrimaryButton, TextInput } from "@coral-xyz/react-common";
 import { useCustomTheme } from "@coral-xyz/themes";
-import { AlternateEmail } from "@mui/icons-material";
+import { AlternateEmail, Person } from "@mui/icons-material";
 import { Box, InputAdornment } from "@mui/material";
 
 import { Header, SubtextParagraph } from "../../common";
@@ -11,9 +11,11 @@ export const UsernameForm = ({
   onNext,
 }: {
   inviteCode: string;
-  onNext: (username: string) => void;
+  onNext: (username: string, firstName: string, lastName: string) => void;
 }) => {
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const theme = useCustomTheme();
 
@@ -34,12 +36,12 @@ export const UsernameForm = ({
         const json = await res.json();
         if (!res.ok) throw new Error(json.message || "There was an error");
 
-        onNext(username);
+        onNext(username, firstName, lastName);
       } catch (err: any) {
         setError(err.message);
       }
     },
-    [username]
+    [username, firstName, lastName]
   );
 
   return (
@@ -53,7 +55,7 @@ export const UsernameForm = ({
         justifyContent: "space-between",
       }}
     >
-      <Box style={{ margin: "24px" }}>
+      <Box sx={{ marginX: "24px" }}>
         <Header text="Claim your username" />
         <SubtextParagraph style={{ margin: "16px 0" }}>
           Others can see and find you by this username, and it will be
@@ -94,6 +96,56 @@ export const UsernameForm = ({
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+          <TextInput
+            inputProps={{
+              name: "firstName",
+              autoComplete: "off",
+              spellCheck: "false",
+            }}
+            placeholder="First Name"
+            type="text"
+            value={firstName}
+            setValue={(e) => {
+              setFirstName(e.target.value.replace(/[^A-Za-z0-9_]/g, ""));
+            }}
+            startAdornment={
+              <InputAdornment position="start">
+                <Person
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+          <TextInput
+            inputProps={{
+              name: "lastName",
+              autoComplete: "off",
+              spellCheck: "false",
+            }}
+            placeholder="Last Name"
+            type="text"
+            value={lastName}
+            setValue={(e) => {
+              setLastName(e.target.value.replace(/[^A-Za-z0-9_]/g, ""));
+            }}
+            startAdornment={
+              <InputAdornment position="start">
+                <Person
                   style={{
                     color: theme.custom.colors.secondary,
                     fontSize: 18,
