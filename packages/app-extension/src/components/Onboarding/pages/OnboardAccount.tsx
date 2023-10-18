@@ -77,8 +77,8 @@ export const OnboardAccount = ({
     <UsernameForm
       key="UsernameForm"
       inviteCode={inviteCode!}
-      onNext={(username) => {
-        setOnboardingData({ username });
+      onNext={(username, firstName, lastName) => {
+        setOnboardingData({ username, lastName, firstName });
         nextStep();
       }}
     />,

@@ -457,6 +457,8 @@ function CreateOrRecoverUsernameScreen({
 
                   setOnboardingData({
                     username,
+                    // lastName,
+                    // firstName
                   });
 
                   navigation.push("CreateOrImportWallet");
