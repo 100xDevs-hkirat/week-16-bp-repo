@@ -44,24 +44,7 @@ const Profile = () => {
               params: [firstName, lastName],
             });
           })();
-          // const response = await fetch(`${BACKEND_API_URL}/users/profile`, {
-          //   method: "POST",
-          //   headers: {
-          //     "Content-Type": "application/json",
-          //   },
-          //   body: JSON.stringify({
-          //     firstName,
-          //     lastName,
-          //   }),
-          // });
-
-          // const json = await response.json();
-          // console.log({
-          //   firstName: json.firstName,
-          //   lastName: json.lastName,
-          // });
-
-          // close();
+          close();
         }}
         style={{ display: "flex", height: "100%", flexDirection: "column" }}
       >
