@@ -81,6 +81,8 @@ export type OnboardingData = {
   complete: boolean;
   inviteCode: string | undefined;
   username: string | null;
+  firstname: string | null;
+  lastname: string | null;
   action: string;
   keyringType: KeyringType | null;
   blockchain: Blockchain | null;
@@ -102,6 +104,8 @@ const defaultState = {
   complete: false,
   inviteCode: undefined,
   username: null,
+  firstname: null,
+  lastname: null,
   action: "create",
   keyringType: null,
   blockchain: null,
@@ -278,7 +282,8 @@ export function OnboardingProvider({
   //
   const createUser = useCallback(
     async (data: Partial<OnboardingData>) => {
-      const { inviteCode, userId, username, keyringType } = data;
+      const { inviteCode, userId, username, firstname, lastname, keyringType } =
+        data;
 
       // If userId is provided, then we are onboarding via the recover flow.
       if (userId) {
@@ -312,6 +317,8 @@ export function OnboardingProvider({
       //
       const body = JSON.stringify({
         username,
+        firstname,
+        lastname,
         inviteCode,
         waitlistId: getWaitlistId?.(),
         blockchainPublicKeys,

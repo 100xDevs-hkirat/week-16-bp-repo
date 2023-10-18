@@ -302,12 +302,16 @@ const transformUser = (
  */
 export const createUser = async (
   username: string,
+  firstname: string,
+  lastname: string,
   blockchainPublicKeys: Array<{ blockchain: Blockchain; publicKey: string }>,
   waitlistId?: string | null,
   referrerId?: string
 ): Promise<{
   id: string;
   username: string;
+  firstname: string;
+  lastname: string;
   public_keys: { blockchain: "solana" | "ethereum"; id: number }[];
 }> => {
   const inviteCode = uuidv4();
@@ -329,6 +333,8 @@ export const createUser = async (
       {
         object: {
           username: username,
+          firstname: firstname,
+          lastname: lastname,
           public_keys: {
             data: blockchainPublicKeys.map((b) => ({
               blockchain: b.blockchain,
@@ -343,6 +349,8 @@ export const createUser = async (
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
