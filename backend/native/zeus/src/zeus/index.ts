@@ -51,7 +51,7 @@ const handleFetchResponse = (response: Response): Promise<GraphQLResponse> => {
         .catch(reject);
     });
   }
-  return response.json();
+  return response.json() as Promise<GraphQLResponse>;
 };
 
 export const apiFetch =
@@ -362,12 +362,17 @@ export const traverseResponse = ({
     ) {
       return o;
     }
-    return Object.fromEntries(
-      Object.entries(o).map(([k, v]) => [
-        k,
-        ibb(k, v, [...p, purifyGraphQLKey(k)]),
-      ])
+    const entries = Object.entries(o).map(
+      ([k, v]) => [k, ibb(k, v, [...p, purifyGraphQLKey(k)])] as const
     );
+    const objectFromEntries = entries.reduce<Record<string, unknown>>(
+      (a, [k, v]) => {
+        a[k] = v;
+        return a;
+      },
+      {}
+    );
+    return objectFromEntries;
   };
   return ibb;
 };
@@ -759,8 +764,8 @@ export const resolverFor = <
     source: any
   ) => Z extends keyof ModelTypes[T]
     ? ModelTypes[T][Z] | Promise<ModelTypes[T][Z]> | X
-    : any
-) => fn as (args?: any, source?: any) => any;
+    : never
+) => fn as (args?: any, source?: any) => ReturnType<typeof fn>;
 
 export type UnwrapPromise<T> = T extends Promise<infer R> ? R : T;
 export type ZeusState<T extends (...args: any[]) => Promise<any>> = NonNullable<
@@ -816,9 +821,13 @@ type IsInterfaced<
                 : DST[P],
               SCLR
             >
-          : Record<string, unknown>
+          : IsArray<
+              R,
+              "__typename" extends keyof DST ? { __typename: true } : never,
+              SCLR
+            >
         : never;
-    }[keyof DST] & {
+    }[keyof SRC] & {
       [P in keyof Omit<
         Pick<
           SRC,
@@ -4317,6 +4326,8 @@ export type ValueTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    abc?: string | undefined | null | Variable<any, string>;
+    firstname?: string | undefined | null | Variable<any, string>;
     invitation?:
       | ValueTypes["auth_invitations_obj_rel_insert_input"]
       | undefined
@@ -4327,6 +4338,7 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
     public_keys?:
       | ValueTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined
@@ -4342,7 +4354,6 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
-    referrer_id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>;
     username?: ValueTypes["citext"] | undefined | null | Variable<any, string>;
     waitlist_id?: string | undefined | null | Variable<any, string>;
   };
@@ -4465,11 +4476,14 @@ export type ValueTypes = {
   ["auth_users_select_column"]: auth_users_select_column;
   /** input type for updating data in table "auth.users" */
   ["auth_users_set_input"]: {
+    abc?: string | undefined | null | Variable<any, string>;
     avatar_nft?:
       | ValueTypes["citext"]
       | undefined
       | null
       | Variable<any, string>;
+    firstname?: string | undefined | null | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
     updated_at?:
       | ValueTypes["timestamptz"]
       | undefined
@@ -11097,11 +11111,14 @@ export type ResolverInputTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    abc?: string | undefined | null;
+    firstname?: string | undefined | null;
     invitation?:
       | ResolverInputTypes["auth_invitations_obj_rel_insert_input"]
       | undefined
       | null;
     invitation_id?: ResolverInputTypes["uuid"] | undefined | null;
+    lastname?: string | undefined | null;
     public_keys?:
       | ResolverInputTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined
@@ -11114,7 +11131,6 @@ export type ResolverInputTypes = {
       | ResolverInputTypes["auth_users_obj_rel_insert_input"]
       | undefined
       | null;
-    referrer_id?: ResolverInputTypes["uuid"] | undefined | null;
     username?: ResolverInputTypes["citext"] | undefined | null;
     waitlist_id?: string | undefined | null;
   };
@@ -11198,7 +11214,10 @@ export type ResolverInputTypes = {
   ["auth_users_select_column"]: auth_users_select_column;
   /** input type for updating data in table "auth.users" */
   ["auth_users_set_input"]: {
+    abc?: string | undefined | null;
     avatar_nft?: ResolverInputTypes["citext"] | undefined | null;
+    firstname?: string | undefined | null;
+    lastname?: string | undefined | null;
     updated_at?: ResolverInputTypes["timestamptz"] | undefined | null;
   };
   /** Streaming cursor of the table "auth_users" */
@@ -16048,16 +16067,18 @@ export type ModelTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    abc?: string | undefined;
+    firstname?: string | undefined;
     invitation?:
       | ModelTypes["auth_invitations_obj_rel_insert_input"]
       | undefined;
     invitation_id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     public_keys?:
       | ModelTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined;
     referred_users?: ModelTypes["auth_users_arr_rel_insert_input"] | undefined;
     referrer?: ModelTypes["auth_users_obj_rel_insert_input"] | undefined;
-    referrer_id?: ModelTypes["uuid"] | undefined;
     username?: ModelTypes["citext"] | undefined;
     waitlist_id?: string | undefined;
   };
@@ -16128,7 +16149,10 @@ export type ModelTypes = {
   ["auth_users_select_column"]: auth_users_select_column;
   /** input type for updating data in table "auth.users" */
   ["auth_users_set_input"]: {
+    abc?: string | undefined;
     avatar_nft?: ModelTypes["citext"] | undefined;
+    firstname?: string | undefined;
+    lastname?: string | undefined;
     updated_at?: ModelTypes["timestamptz"] | undefined;
   };
   /** Streaming cursor of the table "auth_users" */
@@ -18949,10 +18973,13 @@ export type GraphQLTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    abc?: string | undefined;
+    firstname?: string | undefined;
     invitation?:
       | GraphQLTypes["auth_invitations_obj_rel_insert_input"]
       | undefined;
     invitation_id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     public_keys?:
       | GraphQLTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined;
@@ -18960,7 +18987,6 @@ export type GraphQLTypes = {
       | GraphQLTypes["auth_users_arr_rel_insert_input"]
       | undefined;
     referrer?: GraphQLTypes["auth_users_obj_rel_insert_input"] | undefined;
-    referrer_id?: GraphQLTypes["uuid"] | undefined;
     username?: GraphQLTypes["citext"] | undefined;
     waitlist_id?: string | undefined;
   };
@@ -19035,7 +19061,10 @@ export type GraphQLTypes = {
   ["auth_users_select_column"]: auth_users_select_column;
   /** input type for updating data in table "auth.users" */
   ["auth_users_set_input"]: {
+    abc?: string | undefined;
     avatar_nft?: GraphQLTypes["citext"] | undefined;
+    firstname?: string | undefined;
+    lastname?: string | undefined;
     updated_at?: GraphQLTypes["timestamptz"] | undefined;
   };
   /** Streaming cursor of the table "auth_users" */
@@ -20335,7 +20364,10 @@ export const enum auth_users_select_column {
 }
 /** update columns of table "auth.users" */
 export const enum auth_users_update_column {
+  abc = "abc",
   avatar_nft = "avatar_nft",
+  firstname = "firstname",
+  lastname = "lastname",
   updated_at = "updated_at",
 }
 /** unique or primary key constraints on table "auth.xnft_preferences" */

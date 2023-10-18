@@ -60,15 +60,6 @@ computed_fields:
         name: user_dropzone_public_key
         schema: dropzone
     comment: the user's first solana public key inside an array due to hasura limitation
-insert_permissions:
-  - role: auth_worker
-    permission:
-      check: {}
-      columns:
-        - invitation_id
-        - referrer_id
-        - username
-        - waitlist_id
 select_permissions:
   - role: appstore
     permission:
@@ -109,7 +100,10 @@ update_permissions:
   - role: auth_worker
     permission:
       columns:
+        - abc
         - avatar_nft
+        - firstname
+        - lastname
         - updated_at
       filter: {}
       check: null
