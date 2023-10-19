@@ -9,6 +9,9 @@ export function YourAccount() {
   const hasMnemonic = useKeyringHasMnemonic();
 
   const menuItems = {
+    "Change Name": {
+      onClick: () => nav.push("change-name"),
+    },
     "Change Password": {
       onClick: () => nav.push("change-password"),
     },
