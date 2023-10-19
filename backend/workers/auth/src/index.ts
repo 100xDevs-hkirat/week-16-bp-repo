@@ -25,8 +25,6 @@ const BaseCreateUser = z.object({
       /^[a-z0-9_]{3,15}$/,
       "should be between 3-15 characters and can only contain numbers, letters, and underscores."
     ),
-  firstName: z.string(),
-  lastName: z.string(),
   inviteCode: z
     .string()
     .regex(
@@ -188,14 +186,8 @@ app.get("/users/:username", async (c) => {
 app.post("/users", async (c) => {
   const body = await c.req.json();
 
-  const {
-    username,
-    firstName,
-    lastName,
-    inviteCode,
-    waitlistId,
-    blockchainPublicKeys,
-  } = CreateUserWithKeyrings.parse(body);
+  const { username, inviteCode, waitlistId, blockchainPublicKeys } =
+    CreateUserWithKeyrings.parse(body);
 
   // Validate all the signatures
   for (const blockchainPublicKey of blockchainPublicKeys) {
@@ -233,8 +225,6 @@ app.post("/users", async (c) => {
       {
         object: {
           username: username,
-          firstname: firstName,
-          lastname: lastName,
           invitation_id: inviteCode,
           waitlist_id: waitlistId,
           public_keys: {
