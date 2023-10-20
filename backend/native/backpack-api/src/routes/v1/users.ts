@@ -31,6 +31,7 @@ import {
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserName,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -256,6 +257,22 @@ router.get("/me", extractUserId, async (req: Request, res: Response) => {
   }
   return res.status(404).json({ msg: "User not found" });
 });
+
+/**
+ * Updates firstname and lastname of user in database
+ */
+
+router.put(
+  "/changeName",
+  extractUserId,
+  async (req: Request, res: Response) => {
+    const id = req.id || "";
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    await updateUserName(id, firstname, lastname);
+    return res.status(201).end();
+  }
+);
 
 router.get("/primarySolPubkey/:username", async (req, res) => {
   const username = req.params.username;

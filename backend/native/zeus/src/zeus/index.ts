@@ -2000,6 +2000,11 @@ export type ValueTypes = {
       | Variable<any, string>;
     data?: ValueTypes["jsonb"] | undefined | null | Variable<any, string>;
     id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>;
+    user?:
+      | ValueTypes["auth_users_obj_rel_insert_input"]
+      | undefined
+      | null
+      | Variable<any, string>;
   };
   /** response of any mutation on the table "auth.invitations" */
   ["auth_invitations_mutation_response"]: AliasType<{
@@ -2009,6 +2014,16 @@ export type ValueTypes = {
     returning?: ValueTypes["auth_invitations"];
     __typename?: boolean | `@${string}`;
   }>;
+  /** input type for inserting object relation for remote table "auth.invitations" */
+  ["auth_invitations_obj_rel_insert_input"]: {
+    data: ValueTypes["auth_invitations_insert_input"] | Variable<any, string>;
+    /** upsert condition */
+    on_conflict?:
+      | ValueTypes["auth_invitations_on_conflict"]
+      | undefined
+      | null
+      | Variable<any, string>;
+  };
   /** on_conflict condition type for table "auth.invitations" */
   ["auth_invitations_on_conflict"]: {
     constraint:
@@ -2906,6 +2921,18 @@ export type ValueTypes = {
       | null
       | Variable<any, string>;
   };
+  /** input type for inserting array relation for remote table "auth.public_keys" */
+  ["auth_public_keys_arr_rel_insert_input"]: {
+    data:
+      | Array<ValueTypes["auth_public_keys_insert_input"]>
+      | Variable<any, string>;
+    /** upsert condition */
+    on_conflict?:
+      | ValueTypes["auth_public_keys_on_conflict"]
+      | undefined
+      | null
+      | Variable<any, string>;
+  };
   /** aggregate avg on columns */
   ["auth_public_keys_avg_fields"]: AliasType<{
     id?: boolean | `@${string}`;
@@ -2984,6 +3011,11 @@ export type ValueTypes = {
   ["auth_public_keys_insert_input"]: {
     blockchain?: string | undefined | null | Variable<any, string>;
     public_key?: string | undefined | null | Variable<any, string>;
+    user?:
+      | ValueTypes["auth_users_obj_rel_insert_input"]
+      | undefined
+      | null
+      | Variable<any, string>;
     user_active_publickey_mappings?:
       | ValueTypes["auth_user_active_publickey_mapping_arr_rel_insert_input"]
       | undefined
@@ -4010,9 +4042,11 @@ export type ValueTypes = {
       },
       ValueTypes["auth_public_keys"]
     ];
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
     /** An object relationship */
     invitation?: ValueTypes["auth_invitations"];
+    lastname?: boolean | `@${string}`;
     public_keys?: [
       {
         /** distinct select on columns */
@@ -4212,6 +4246,16 @@ export type ValueTypes = {
       | null
       | Variable<any, string>;
   };
+  /** input type for inserting array relation for remote table "auth.users" */
+  ["auth_users_arr_rel_insert_input"]: {
+    data: Array<ValueTypes["auth_users_insert_input"]> | Variable<any, string>;
+    /** upsert condition */
+    on_conflict?:
+      | ValueTypes["auth_users_on_conflict"]
+      | undefined
+      | null
+      | Variable<any, string>;
+  };
   /** Boolean expression to filter rows from the table "auth.users". All fields are combined with a logical 'AND'. */
   ["auth_users_bool_exp"]: {
     _and?:
@@ -4239,6 +4283,11 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["String_comparison_exp"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?:
       | ValueTypes["uuid_comparison_exp"]
       | undefined
@@ -4246,6 +4295,11 @@ export type ValueTypes = {
       | Variable<any, string>;
     invitation?:
       | ValueTypes["auth_invitations_bool_exp"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    lastname?:
+      | ValueTypes["String_comparison_exp"]
       | undefined
       | null
       | Variable<any, string>;
@@ -4280,10 +4334,70 @@ export type ValueTypes = {
       | null
       | Variable<any, string>;
   };
+  /** unique or primary key constraints on table "auth.users" */
+  ["auth_users_constraint"]: auth_users_constraint;
+  /** input type for inserting data into table "auth.users" */
+  ["auth_users_insert_input"]: {
+    abc?: string | undefined | null | Variable<any, string>;
+    avatar_nft?:
+      | ValueTypes["citext"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    created_at?:
+      | ValueTypes["timestamptz"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    firstname?: string | undefined | null | Variable<any, string>;
+    id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>;
+    invitation?:
+      | ValueTypes["auth_invitations_obj_rel_insert_input"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    invitation_id?:
+      | ValueTypes["uuid"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    is_internal?: boolean | undefined | null | Variable<any, string>;
+    last_active_at?:
+      | ValueTypes["timestamptz"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
+    public_keys?:
+      | ValueTypes["auth_public_keys_arr_rel_insert_input"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    referred_users?:
+      | ValueTypes["auth_users_arr_rel_insert_input"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    referrer?:
+      | ValueTypes["auth_users_obj_rel_insert_input"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    referrer_id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>;
+    updated_at?:
+      | ValueTypes["timestamptz"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    username?: ValueTypes["citext"] | undefined | null | Variable<any, string>;
+    waitlist_id?: string | undefined | null | Variable<any, string>;
+  };
   /** aggregate max on columns */
   ["auth_users_max_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
@@ -4294,7 +4408,17 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?: ValueTypes["order_by"] | undefined | null | Variable<any, string>;
+    lastname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     username?:
       | ValueTypes["order_by"]
       | undefined
@@ -4304,7 +4428,9 @@ export type ValueTypes = {
   /** aggregate min on columns */
   ["auth_users_min_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
@@ -4315,7 +4441,17 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?: ValueTypes["order_by"] | undefined | null | Variable<any, string>;
+    lastname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     username?:
       | ValueTypes["order_by"]
       | undefined
@@ -4330,6 +4466,28 @@ export type ValueTypes = {
     returning?: ValueTypes["auth_users"];
     __typename?: boolean | `@${string}`;
   }>;
+  /** input type for inserting object relation for remote table "auth.users" */
+  ["auth_users_obj_rel_insert_input"]: {
+    data: ValueTypes["auth_users_insert_input"] | Variable<any, string>;
+    /** upsert condition */
+    on_conflict?:
+      | ValueTypes["auth_users_on_conflict"]
+      | undefined
+      | null
+      | Variable<any, string>;
+  };
+  /** on_conflict condition type for table "auth.users" */
+  ["auth_users_on_conflict"]: {
+    constraint: ValueTypes["auth_users_constraint"] | Variable<any, string>;
+    update_columns:
+      | Array<ValueTypes["auth_users_update_column"]>
+      | Variable<any, string>;
+    where?:
+      | ValueTypes["auth_users_bool_exp"]
+      | undefined
+      | null
+      | Variable<any, string>;
+  };
   /** Ordering options when selecting data from "auth.users". */
   ["auth_users_order_by"]: {
     created_at?:
@@ -4342,9 +4500,19 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?: ValueTypes["order_by"] | undefined | null | Variable<any, string>;
     invitation?:
       | ValueTypes["auth_invitations_order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    lastname?:
+      | ValueTypes["order_by"]
       | undefined
       | null
       | Variable<any, string>;
@@ -4411,9 +4579,13 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?: string | undefined | null | Variable<any, string>;
     id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
     username?: ValueTypes["citext"] | undefined | null | Variable<any, string>;
   };
+  /** update columns of table "auth.users" */
+  ["auth_users_update_column"]: auth_users_update_column;
   ["auth_users_updates"]: {
     /** sets the columns of the filtered rows to the given values */
     _set?:
@@ -5532,6 +5704,34 @@ export type ValueTypes = {
           | Variable<any, string>;
       },
       ValueTypes["auth_user_nfts"]
+    ];
+    insert_auth_users?: [
+      {
+        /** the rows to be inserted */
+        objects:
+          | Array<ValueTypes["auth_users_insert_input"]>
+          | Variable<any, string> /** upsert condition */;
+        on_conflict?:
+          | ValueTypes["auth_users_on_conflict"]
+          | undefined
+          | null
+          | Variable<any, string>;
+      },
+      ValueTypes["auth_users_mutation_response"]
+    ];
+    insert_auth_users_one?: [
+      {
+        /** the row to be inserted */
+        object:
+          | ValueTypes["auth_users_insert_input"]
+          | Variable<any, string> /** upsert condition */;
+        on_conflict?:
+          | ValueTypes["auth_users_on_conflict"]
+          | undefined
+          | null
+          | Variable<any, string>;
+      },
+      ValueTypes["auth_users"]
     ];
     insert_auth_xnft_preferences?: [
       {
@@ -9308,6 +9508,10 @@ export type ResolverInputTypes = {
     created_at?: ResolverInputTypes["timestamptz"] | undefined | null;
     data?: ResolverInputTypes["jsonb"] | undefined | null;
     id?: ResolverInputTypes["uuid"] | undefined | null;
+    user?:
+      | ResolverInputTypes["auth_users_obj_rel_insert_input"]
+      | undefined
+      | null;
   };
   /** response of any mutation on the table "auth.invitations" */
   ["auth_invitations_mutation_response"]: AliasType<{
@@ -9317,6 +9521,15 @@ export type ResolverInputTypes = {
     returning?: ResolverInputTypes["auth_invitations"];
     __typename?: boolean | `@${string}`;
   }>;
+  /** input type for inserting object relation for remote table "auth.invitations" */
+  ["auth_invitations_obj_rel_insert_input"]: {
+    data: ResolverInputTypes["auth_invitations_insert_input"];
+    /** upsert condition */
+    on_conflict?:
+      | ResolverInputTypes["auth_invitations_on_conflict"]
+      | undefined
+      | null;
+  };
   /** on_conflict condition type for table "auth.invitations" */
   ["auth_invitations_on_conflict"]: {
     constraint: ResolverInputTypes["auth_invitations_constraint"];
@@ -9996,6 +10209,15 @@ export type ResolverInputTypes = {
       | undefined
       | null;
   };
+  /** input type for inserting array relation for remote table "auth.public_keys" */
+  ["auth_public_keys_arr_rel_insert_input"]: {
+    data: Array<ResolverInputTypes["auth_public_keys_insert_input"]>;
+    /** upsert condition */
+    on_conflict?:
+      | ResolverInputTypes["auth_public_keys_on_conflict"]
+      | undefined
+      | null;
+  };
   /** aggregate avg on columns */
   ["auth_public_keys_avg_fields"]: AliasType<{
     id?: boolean | `@${string}`;
@@ -10044,6 +10266,10 @@ export type ResolverInputTypes = {
   ["auth_public_keys_insert_input"]: {
     blockchain?: string | undefined | null;
     public_key?: string | undefined | null;
+    user?:
+      | ResolverInputTypes["auth_users_obj_rel_insert_input"]
+      | undefined
+      | null;
     user_active_publickey_mappings?:
       | ResolverInputTypes["auth_user_active_publickey_mapping_arr_rel_insert_input"]
       | undefined
@@ -10757,9 +10983,11 @@ export type ResolverInputTypes = {
       },
       ResolverInputTypes["auth_public_keys"]
     ];
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
     /** An object relationship */
     invitation?: ResolverInputTypes["auth_invitations"];
+    lastname?: boolean | `@${string}`;
     public_keys?: [
       {
         /** distinct select on columns */
@@ -10906,6 +11134,15 @@ export type ResolverInputTypes = {
     max?: ResolverInputTypes["auth_users_max_order_by"] | undefined | null;
     min?: ResolverInputTypes["auth_users_min_order_by"] | undefined | null;
   };
+  /** input type for inserting array relation for remote table "auth.users" */
+  ["auth_users_arr_rel_insert_input"]: {
+    data: Array<ResolverInputTypes["auth_users_insert_input"]>;
+    /** upsert condition */
+    on_conflict?:
+      | ResolverInputTypes["auth_users_on_conflict"]
+      | undefined
+      | null;
+  };
   /** Boolean expression to filter rows from the table "auth.users". All fields are combined with a logical 'AND'. */
   ["auth_users_bool_exp"]: {
     _and?: Array<ResolverInputTypes["auth_users_bool_exp"]> | undefined | null;
@@ -10919,11 +11156,13 @@ export type ResolverInputTypes = {
       | ResolverInputTypes["auth_public_keys_bool_exp"]
       | undefined
       | null;
+    firstname?: ResolverInputTypes["String_comparison_exp"] | undefined | null;
     id?: ResolverInputTypes["uuid_comparison_exp"] | undefined | null;
     invitation?:
       | ResolverInputTypes["auth_invitations_bool_exp"]
       | undefined
       | null;
+    lastname?: ResolverInputTypes["String_comparison_exp"] | undefined | null;
     public_keys?:
       | ResolverInputTypes["auth_public_keys_bool_exp"]
       | undefined
@@ -10943,30 +11182,72 @@ export type ResolverInputTypes = {
     referrer?: ResolverInputTypes["auth_users_bool_exp"] | undefined | null;
     username?: ResolverInputTypes["citext_comparison_exp"] | undefined | null;
   };
+  /** unique or primary key constraints on table "auth.users" */
+  ["auth_users_constraint"]: auth_users_constraint;
+  /** input type for inserting data into table "auth.users" */
+  ["auth_users_insert_input"]: {
+    abc?: string | undefined | null;
+    avatar_nft?: ResolverInputTypes["citext"] | undefined | null;
+    created_at?: ResolverInputTypes["timestamptz"] | undefined | null;
+    firstname?: string | undefined | null;
+    id?: ResolverInputTypes["uuid"] | undefined | null;
+    invitation?:
+      | ResolverInputTypes["auth_invitations_obj_rel_insert_input"]
+      | undefined
+      | null;
+    invitation_id?: ResolverInputTypes["uuid"] | undefined | null;
+    is_internal?: boolean | undefined | null;
+    last_active_at?: ResolverInputTypes["timestamptz"] | undefined | null;
+    lastname?: string | undefined | null;
+    public_keys?:
+      | ResolverInputTypes["auth_public_keys_arr_rel_insert_input"]
+      | undefined
+      | null;
+    referred_users?:
+      | ResolverInputTypes["auth_users_arr_rel_insert_input"]
+      | undefined
+      | null;
+    referrer?:
+      | ResolverInputTypes["auth_users_obj_rel_insert_input"]
+      | undefined
+      | null;
+    referrer_id?: ResolverInputTypes["uuid"] | undefined | null;
+    updated_at?: ResolverInputTypes["timestamptz"] | undefined | null;
+    username?: ResolverInputTypes["citext"] | undefined | null;
+    waitlist_id?: string | undefined | null;
+  };
   /** aggregate max on columns */
   ["auth_users_max_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** order by max() on columns of table "auth.users" */
   ["auth_users_max_order_by"]: {
     created_at?: ResolverInputTypes["order_by"] | undefined | null;
+    firstname?: ResolverInputTypes["order_by"] | undefined | null;
     id?: ResolverInputTypes["order_by"] | undefined | null;
+    lastname?: ResolverInputTypes["order_by"] | undefined | null;
     username?: ResolverInputTypes["order_by"] | undefined | null;
   };
   /** aggregate min on columns */
   ["auth_users_min_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** order by min() on columns of table "auth.users" */
   ["auth_users_min_order_by"]: {
     created_at?: ResolverInputTypes["order_by"] | undefined | null;
+    firstname?: ResolverInputTypes["order_by"] | undefined | null;
     id?: ResolverInputTypes["order_by"] | undefined | null;
+    lastname?: ResolverInputTypes["order_by"] | undefined | null;
     username?: ResolverInputTypes["order_by"] | undefined | null;
   };
   /** response of any mutation on the table "auth.users" */
@@ -10977,6 +11258,21 @@ export type ResolverInputTypes = {
     returning?: ResolverInputTypes["auth_users"];
     __typename?: boolean | `@${string}`;
   }>;
+  /** input type for inserting object relation for remote table "auth.users" */
+  ["auth_users_obj_rel_insert_input"]: {
+    data: ResolverInputTypes["auth_users_insert_input"];
+    /** upsert condition */
+    on_conflict?:
+      | ResolverInputTypes["auth_users_on_conflict"]
+      | undefined
+      | null;
+  };
+  /** on_conflict condition type for table "auth.users" */
+  ["auth_users_on_conflict"]: {
+    constraint: ResolverInputTypes["auth_users_constraint"];
+    update_columns: Array<ResolverInputTypes["auth_users_update_column"]>;
+    where?: ResolverInputTypes["auth_users_bool_exp"] | undefined | null;
+  };
   /** Ordering options when selecting data from "auth.users". */
   ["auth_users_order_by"]: {
     created_at?: ResolverInputTypes["order_by"] | undefined | null;
@@ -10984,11 +11280,13 @@ export type ResolverInputTypes = {
       | ResolverInputTypes["auth_public_keys_aggregate_order_by"]
       | undefined
       | null;
+    firstname?: ResolverInputTypes["order_by"] | undefined | null;
     id?: ResolverInputTypes["order_by"] | undefined | null;
     invitation?:
       | ResolverInputTypes["auth_invitations_order_by"]
       | undefined
       | null;
+    lastname?: ResolverInputTypes["order_by"] | undefined | null;
     public_keys_aggregate?:
       | ResolverInputTypes["auth_public_keys_aggregate_order_by"]
       | undefined
@@ -11024,9 +11322,13 @@ export type ResolverInputTypes = {
   /** Initial value of the column from where the streaming should start */
   ["auth_users_stream_cursor_value_input"]: {
     created_at?: ResolverInputTypes["timestamptz"] | undefined | null;
+    firstname?: string | undefined | null;
     id?: ResolverInputTypes["uuid"] | undefined | null;
+    lastname?: string | undefined | null;
     username?: ResolverInputTypes["citext"] | undefined | null;
   };
+  /** update columns of table "auth.users" */
+  ["auth_users_update_column"]: auth_users_update_column;
   ["auth_users_updates"]: {
     /** sets the columns of the filtered rows to the given values */
     _set?: ResolverInputTypes["auth_users_set_input"] | undefined | null;
@@ -11889,6 +12191,30 @@ export type ResolverInputTypes = {
           | null;
       },
       ResolverInputTypes["auth_user_nfts"]
+    ];
+    insert_auth_users?: [
+      {
+        /** the rows to be inserted */
+        objects: Array<
+          ResolverInputTypes["auth_users_insert_input"]
+        > /** upsert condition */;
+        on_conflict?:
+          | ResolverInputTypes["auth_users_on_conflict"]
+          | undefined
+          | null;
+      },
+      ResolverInputTypes["auth_users_mutation_response"]
+    ];
+    insert_auth_users_one?: [
+      {
+        /** the row to be inserted */
+        object: ResolverInputTypes["auth_users_insert_input"] /** upsert condition */;
+        on_conflict?:
+          | ResolverInputTypes["auth_users_on_conflict"]
+          | undefined
+          | null;
+      },
+      ResolverInputTypes["auth_users"]
     ];
     insert_auth_xnft_preferences?: [
       {
@@ -14681,6 +15007,7 @@ export type ModelTypes = {
     created_at?: ModelTypes["timestamptz"] | undefined;
     data?: ModelTypes["jsonb"] | undefined;
     id?: ModelTypes["uuid"] | undefined;
+    user?: ModelTypes["auth_users_obj_rel_insert_input"] | undefined;
   };
   /** response of any mutation on the table "auth.invitations" */
   ["auth_invitations_mutation_response"]: {
@@ -14688,6 +15015,12 @@ export type ModelTypes = {
     affected_rows: number;
     /** data from the rows affected by the mutation */
     returning: Array<ModelTypes["auth_invitations"]>;
+  };
+  /** input type for inserting object relation for remote table "auth.invitations" */
+  ["auth_invitations_obj_rel_insert_input"]: {
+    data: ModelTypes["auth_invitations_insert_input"];
+    /** upsert condition */
+    on_conflict?: ModelTypes["auth_invitations_on_conflict"] | undefined;
   };
   /** on_conflict condition type for table "auth.invitations" */
   ["auth_invitations_on_conflict"]: {
@@ -15152,6 +15485,12 @@ export type ModelTypes = {
     var_samp?: ModelTypes["auth_public_keys_var_samp_order_by"] | undefined;
     variance?: ModelTypes["auth_public_keys_variance_order_by"] | undefined;
   };
+  /** input type for inserting array relation for remote table "auth.public_keys" */
+  ["auth_public_keys_arr_rel_insert_input"]: {
+    data: Array<ModelTypes["auth_public_keys_insert_input"]>;
+    /** upsert condition */
+    on_conflict?: ModelTypes["auth_public_keys_on_conflict"] | undefined;
+  };
   /** aggregate avg on columns */
   ["auth_public_keys_avg_fields"]: {
     id?: number | undefined;
@@ -15184,6 +15523,7 @@ export type ModelTypes = {
   ["auth_public_keys_insert_input"]: {
     blockchain?: string | undefined;
     public_key?: string | undefined;
+    user?: ModelTypes["auth_users_obj_rel_insert_input"] | undefined;
     user_active_publickey_mappings?:
       | ModelTypes["auth_user_active_publickey_mapping_arr_rel_insert_input"]
       | undefined;
@@ -15751,9 +16091,11 @@ export type ModelTypes = {
     created_at: ModelTypes["timestamptz"];
     /** the user's first solana public key inside an array due to hasura limitation */
     dropzone_public_key?: Array<ModelTypes["auth_public_keys"]> | undefined;
+    firstname?: string | undefined;
     id: ModelTypes["uuid"];
     /** An object relationship */
     invitation: ModelTypes["auth_invitations"];
+    lastname?: string | undefined;
     /** An array relationship */
     public_keys: Array<ModelTypes["auth_public_keys"]>;
     /** An aggregate relationship */
@@ -15792,6 +16134,12 @@ export type ModelTypes = {
     max?: ModelTypes["auth_users_max_order_by"] | undefined;
     min?: ModelTypes["auth_users_min_order_by"] | undefined;
   };
+  /** input type for inserting array relation for remote table "auth.users" */
+  ["auth_users_arr_rel_insert_input"]: {
+    data: Array<ModelTypes["auth_users_insert_input"]>;
+    /** upsert condition */
+    on_conflict?: ModelTypes["auth_users_on_conflict"] | undefined;
+  };
   /** Boolean expression to filter rows from the table "auth.users". All fields are combined with a logical 'AND'. */
   ["auth_users_bool_exp"]: {
     _and?: Array<ModelTypes["auth_users_bool_exp"]> | undefined;
@@ -15799,8 +16147,10 @@ export type ModelTypes = {
     _or?: Array<ModelTypes["auth_users_bool_exp"]> | undefined;
     created_at?: ModelTypes["timestamptz_comparison_exp"] | undefined;
     dropzone_public_key?: ModelTypes["auth_public_keys_bool_exp"] | undefined;
+    firstname?: ModelTypes["String_comparison_exp"] | undefined;
     id?: ModelTypes["uuid_comparison_exp"] | undefined;
     invitation?: ModelTypes["auth_invitations_bool_exp"] | undefined;
+    lastname?: ModelTypes["String_comparison_exp"] | undefined;
     public_keys?: ModelTypes["auth_public_keys_bool_exp"] | undefined;
     public_keys_aggregate?:
       | ModelTypes["auth_public_keys_aggregate_bool_exp"]
@@ -15812,28 +16162,61 @@ export type ModelTypes = {
     referrer?: ModelTypes["auth_users_bool_exp"] | undefined;
     username?: ModelTypes["citext_comparison_exp"] | undefined;
   };
+  ["auth_users_constraint"]: auth_users_constraint;
+  /** input type for inserting data into table "auth.users" */
+  ["auth_users_insert_input"]: {
+    abc?: string | undefined;
+    avatar_nft?: ModelTypes["citext"] | undefined;
+    created_at?: ModelTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
+    id?: ModelTypes["uuid"] | undefined;
+    invitation?:
+      | ModelTypes["auth_invitations_obj_rel_insert_input"]
+      | undefined;
+    invitation_id?: ModelTypes["uuid"] | undefined;
+    is_internal?: boolean | undefined;
+    last_active_at?: ModelTypes["timestamptz"] | undefined;
+    lastname?: string | undefined;
+    public_keys?:
+      | ModelTypes["auth_public_keys_arr_rel_insert_input"]
+      | undefined;
+    referred_users?: ModelTypes["auth_users_arr_rel_insert_input"] | undefined;
+    referrer?: ModelTypes["auth_users_obj_rel_insert_input"] | undefined;
+    referrer_id?: ModelTypes["uuid"] | undefined;
+    updated_at?: ModelTypes["timestamptz"] | undefined;
+    username?: ModelTypes["citext"] | undefined;
+    waitlist_id?: string | undefined;
+  };
   /** aggregate max on columns */
   ["auth_users_max_fields"]: {
     created_at?: ModelTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: ModelTypes["citext"] | undefined;
   };
   /** order by max() on columns of table "auth.users" */
   ["auth_users_max_order_by"]: {
     created_at?: ModelTypes["order_by"] | undefined;
+    firstname?: ModelTypes["order_by"] | undefined;
     id?: ModelTypes["order_by"] | undefined;
+    lastname?: ModelTypes["order_by"] | undefined;
     username?: ModelTypes["order_by"] | undefined;
   };
   /** aggregate min on columns */
   ["auth_users_min_fields"]: {
     created_at?: ModelTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: ModelTypes["citext"] | undefined;
   };
   /** order by min() on columns of table "auth.users" */
   ["auth_users_min_order_by"]: {
     created_at?: ModelTypes["order_by"] | undefined;
+    firstname?: ModelTypes["order_by"] | undefined;
     id?: ModelTypes["order_by"] | undefined;
+    lastname?: ModelTypes["order_by"] | undefined;
     username?: ModelTypes["order_by"] | undefined;
   };
   /** response of any mutation on the table "auth.users" */
@@ -15843,14 +16226,28 @@ export type ModelTypes = {
     /** data from the rows affected by the mutation */
     returning: Array<ModelTypes["auth_users"]>;
   };
+  /** input type for inserting object relation for remote table "auth.users" */
+  ["auth_users_obj_rel_insert_input"]: {
+    data: ModelTypes["auth_users_insert_input"];
+    /** upsert condition */
+    on_conflict?: ModelTypes["auth_users_on_conflict"] | undefined;
+  };
+  /** on_conflict condition type for table "auth.users" */
+  ["auth_users_on_conflict"]: {
+    constraint: ModelTypes["auth_users_constraint"];
+    update_columns: Array<ModelTypes["auth_users_update_column"]>;
+    where?: ModelTypes["auth_users_bool_exp"] | undefined;
+  };
   /** Ordering options when selecting data from "auth.users". */
   ["auth_users_order_by"]: {
     created_at?: ModelTypes["order_by"] | undefined;
     dropzone_public_key_aggregate?:
       | ModelTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
+    firstname?: ModelTypes["order_by"] | undefined;
     id?: ModelTypes["order_by"] | undefined;
     invitation?: ModelTypes["auth_invitations_order_by"] | undefined;
+    lastname?: ModelTypes["order_by"] | undefined;
     public_keys_aggregate?:
       | ModelTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
@@ -15883,9 +16280,12 @@ export type ModelTypes = {
   /** Initial value of the column from where the streaming should start */
   ["auth_users_stream_cursor_value_input"]: {
     created_at?: ModelTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: ModelTypes["citext"] | undefined;
   };
+  ["auth_users_update_column"]: auth_users_update_column;
   ["auth_users_updates"]: {
     /** sets the columns of the filtered rows to the given values */
     _set?: ModelTypes["auth_users_set_input"] | undefined;
@@ -16417,6 +16817,10 @@ export type ModelTypes = {
       | undefined;
     /** insert a single row into the table: "auth.user_nfts" */
     insert_auth_user_nfts_one?: ModelTypes["auth_user_nfts"] | undefined;
+    /** insert data into the table: "auth.users" */
+    insert_auth_users?: ModelTypes["auth_users_mutation_response"] | undefined;
+    /** insert a single row into the table: "auth.users" */
+    insert_auth_users_one?: ModelTypes["auth_users"] | undefined;
     /** insert data into the table: "auth.xnft_preferences" */
     insert_auth_xnft_preferences?:
       | ModelTypes["auth_xnft_preferences_mutation_response"]
@@ -17440,6 +17844,7 @@ export type GraphQLTypes = {
     created_at?: GraphQLTypes["timestamptz"] | undefined;
     data?: GraphQLTypes["jsonb"] | undefined;
     id?: GraphQLTypes["uuid"] | undefined;
+    user?: GraphQLTypes["auth_users_obj_rel_insert_input"] | undefined;
   };
   /** response of any mutation on the table "auth.invitations" */
   ["auth_invitations_mutation_response"]: {
@@ -17448,6 +17853,12 @@ export type GraphQLTypes = {
     affected_rows: number;
     /** data from the rows affected by the mutation */
     returning: Array<GraphQLTypes["auth_invitations"]>;
+  };
+  /** input type for inserting object relation for remote table "auth.invitations" */
+  ["auth_invitations_obj_rel_insert_input"]: {
+    data: GraphQLTypes["auth_invitations_insert_input"];
+    /** upsert condition */
+    on_conflict?: GraphQLTypes["auth_invitations_on_conflict"] | undefined;
   };
   /** on_conflict condition type for table "auth.invitations" */
   ["auth_invitations_on_conflict"]: {
@@ -17962,6 +18373,12 @@ export type GraphQLTypes = {
     var_samp?: GraphQLTypes["auth_public_keys_var_samp_order_by"] | undefined;
     variance?: GraphQLTypes["auth_public_keys_variance_order_by"] | undefined;
   };
+  /** input type for inserting array relation for remote table "auth.public_keys" */
+  ["auth_public_keys_arr_rel_insert_input"]: {
+    data: Array<GraphQLTypes["auth_public_keys_insert_input"]>;
+    /** upsert condition */
+    on_conflict?: GraphQLTypes["auth_public_keys_on_conflict"] | undefined;
+  };
   /** aggregate avg on columns */
   ["auth_public_keys_avg_fields"]: {
     __typename: "auth_public_keys_avg_fields";
@@ -17996,6 +18413,7 @@ export type GraphQLTypes = {
   ["auth_public_keys_insert_input"]: {
     blockchain?: string | undefined;
     public_key?: string | undefined;
+    user?: GraphQLTypes["auth_users_obj_rel_insert_input"] | undefined;
     user_active_publickey_mappings?:
       | GraphQLTypes["auth_user_active_publickey_mapping_arr_rel_insert_input"]
       | undefined;
@@ -18599,9 +19017,11 @@ export type GraphQLTypes = {
     created_at: GraphQLTypes["timestamptz"];
     /** the user's first solana public key inside an array due to hasura limitation */
     dropzone_public_key?: Array<GraphQLTypes["auth_public_keys"]> | undefined;
+    firstname?: string | undefined;
     id: GraphQLTypes["uuid"];
     /** An object relationship */
     invitation: GraphQLTypes["auth_invitations"];
+    lastname?: string | undefined;
     /** An array relationship */
     public_keys: Array<GraphQLTypes["auth_public_keys"]>;
     /** An aggregate relationship */
@@ -18642,6 +19062,12 @@ export type GraphQLTypes = {
     max?: GraphQLTypes["auth_users_max_order_by"] | undefined;
     min?: GraphQLTypes["auth_users_min_order_by"] | undefined;
   };
+  /** input type for inserting array relation for remote table "auth.users" */
+  ["auth_users_arr_rel_insert_input"]: {
+    data: Array<GraphQLTypes["auth_users_insert_input"]>;
+    /** upsert condition */
+    on_conflict?: GraphQLTypes["auth_users_on_conflict"] | undefined;
+  };
   /** Boolean expression to filter rows from the table "auth.users". All fields are combined with a logical 'AND'. */
   ["auth_users_bool_exp"]: {
     _and?: Array<GraphQLTypes["auth_users_bool_exp"]> | undefined;
@@ -18649,8 +19075,10 @@ export type GraphQLTypes = {
     _or?: Array<GraphQLTypes["auth_users_bool_exp"]> | undefined;
     created_at?: GraphQLTypes["timestamptz_comparison_exp"] | undefined;
     dropzone_public_key?: GraphQLTypes["auth_public_keys_bool_exp"] | undefined;
+    firstname?: GraphQLTypes["String_comparison_exp"] | undefined;
     id?: GraphQLTypes["uuid_comparison_exp"] | undefined;
     invitation?: GraphQLTypes["auth_invitations_bool_exp"] | undefined;
+    lastname?: GraphQLTypes["String_comparison_exp"] | undefined;
     public_keys?: GraphQLTypes["auth_public_keys_bool_exp"] | undefined;
     public_keys_aggregate?:
       | GraphQLTypes["auth_public_keys_aggregate_bool_exp"]
@@ -18662,30 +19090,66 @@ export type GraphQLTypes = {
     referrer?: GraphQLTypes["auth_users_bool_exp"] | undefined;
     username?: GraphQLTypes["citext_comparison_exp"] | undefined;
   };
+  /** unique or primary key constraints on table "auth.users" */
+  ["auth_users_constraint"]: auth_users_constraint;
+  /** input type for inserting data into table "auth.users" */
+  ["auth_users_insert_input"]: {
+    abc?: string | undefined;
+    avatar_nft?: GraphQLTypes["citext"] | undefined;
+    created_at?: GraphQLTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
+    id?: GraphQLTypes["uuid"] | undefined;
+    invitation?:
+      | GraphQLTypes["auth_invitations_obj_rel_insert_input"]
+      | undefined;
+    invitation_id?: GraphQLTypes["uuid"] | undefined;
+    is_internal?: boolean | undefined;
+    last_active_at?: GraphQLTypes["timestamptz"] | undefined;
+    lastname?: string | undefined;
+    public_keys?:
+      | GraphQLTypes["auth_public_keys_arr_rel_insert_input"]
+      | undefined;
+    referred_users?:
+      | GraphQLTypes["auth_users_arr_rel_insert_input"]
+      | undefined;
+    referrer?: GraphQLTypes["auth_users_obj_rel_insert_input"] | undefined;
+    referrer_id?: GraphQLTypes["uuid"] | undefined;
+    updated_at?: GraphQLTypes["timestamptz"] | undefined;
+    username?: GraphQLTypes["citext"] | undefined;
+    waitlist_id?: string | undefined;
+  };
   /** aggregate max on columns */
   ["auth_users_max_fields"]: {
     __typename: "auth_users_max_fields";
     created_at?: GraphQLTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: GraphQLTypes["citext"] | undefined;
   };
   /** order by max() on columns of table "auth.users" */
   ["auth_users_max_order_by"]: {
     created_at?: GraphQLTypes["order_by"] | undefined;
+    firstname?: GraphQLTypes["order_by"] | undefined;
     id?: GraphQLTypes["order_by"] | undefined;
+    lastname?: GraphQLTypes["order_by"] | undefined;
     username?: GraphQLTypes["order_by"] | undefined;
   };
   /** aggregate min on columns */
   ["auth_users_min_fields"]: {
     __typename: "auth_users_min_fields";
     created_at?: GraphQLTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: GraphQLTypes["citext"] | undefined;
   };
   /** order by min() on columns of table "auth.users" */
   ["auth_users_min_order_by"]: {
     created_at?: GraphQLTypes["order_by"] | undefined;
+    firstname?: GraphQLTypes["order_by"] | undefined;
     id?: GraphQLTypes["order_by"] | undefined;
+    lastname?: GraphQLTypes["order_by"] | undefined;
     username?: GraphQLTypes["order_by"] | undefined;
   };
   /** response of any mutation on the table "auth.users" */
@@ -18696,14 +19160,28 @@ export type GraphQLTypes = {
     /** data from the rows affected by the mutation */
     returning: Array<GraphQLTypes["auth_users"]>;
   };
+  /** input type for inserting object relation for remote table "auth.users" */
+  ["auth_users_obj_rel_insert_input"]: {
+    data: GraphQLTypes["auth_users_insert_input"];
+    /** upsert condition */
+    on_conflict?: GraphQLTypes["auth_users_on_conflict"] | undefined;
+  };
+  /** on_conflict condition type for table "auth.users" */
+  ["auth_users_on_conflict"]: {
+    constraint: GraphQLTypes["auth_users_constraint"];
+    update_columns: Array<GraphQLTypes["auth_users_update_column"]>;
+    where?: GraphQLTypes["auth_users_bool_exp"] | undefined;
+  };
   /** Ordering options when selecting data from "auth.users". */
   ["auth_users_order_by"]: {
     created_at?: GraphQLTypes["order_by"] | undefined;
     dropzone_public_key_aggregate?:
       | GraphQLTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
+    firstname?: GraphQLTypes["order_by"] | undefined;
     id?: GraphQLTypes["order_by"] | undefined;
     invitation?: GraphQLTypes["auth_invitations_order_by"] | undefined;
+    lastname?: GraphQLTypes["order_by"] | undefined;
     public_keys_aggregate?:
       | GraphQLTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
@@ -18737,9 +19215,13 @@ export type GraphQLTypes = {
   /** Initial value of the column from where the streaming should start */
   ["auth_users_stream_cursor_value_input"]: {
     created_at?: GraphQLTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: GraphQLTypes["citext"] | undefined;
   };
+  /** update columns of table "auth.users" */
+  ["auth_users_update_column"]: auth_users_update_column;
   ["auth_users_updates"]: {
     /** sets the columns of the filtered rows to the given values */
     _set?: GraphQLTypes["auth_users_set_input"] | undefined;
@@ -19304,6 +19786,12 @@ export type GraphQLTypes = {
       | undefined;
     /** insert a single row into the table: "auth.user_nfts" */
     insert_auth_user_nfts_one?: GraphQLTypes["auth_user_nfts"] | undefined;
+    /** insert data into the table: "auth.users" */
+    insert_auth_users?:
+      | GraphQLTypes["auth_users_mutation_response"]
+      | undefined;
+    /** insert a single row into the table: "auth.users" */
+    insert_auth_users_one?: GraphQLTypes["auth_users"] | undefined;
     /** insert data into the table: "auth.xnft_preferences" */
     insert_auth_xnft_preferences?:
       | GraphQLTypes["auth_xnft_preferences_mutation_response"]
@@ -20002,11 +20490,27 @@ export const enum auth_user_nfts_select_column {
 export const enum auth_user_nfts_update_column {
   _PLACEHOLDER = "_PLACEHOLDER",
 }
+/** unique or primary key constraints on table "auth.users" */
+export const enum auth_users_constraint {
+  users_invitation_id_key = "users_invitation_id_key",
+  users_pkey = "users_pkey",
+  users_username_key = "users_username_key",
+}
 /** select columns of table "auth.users" */
 export const enum auth_users_select_column {
   created_at = "created_at",
+  firstname = "firstname",
   id = "id",
+  lastname = "lastname",
   username = "username",
+}
+/** update columns of table "auth.users" */
+export const enum auth_users_update_column {
+  abc = "abc",
+  avatar_nft = "avatar_nft",
+  firstname = "firstname",
+  lastname = "lastname",
+  updated_at = "updated_at",
 }
 /** unique or primary key constraints on table "auth.xnft_preferences" */
 export const enum auth_xnft_preferences_constraint {
@@ -20137,6 +20641,7 @@ type ZEUS_VARIABLES = {
   ["auth_invitations_bool_exp"]: ValueTypes["auth_invitations_bool_exp"];
   ["auth_invitations_constraint"]: ValueTypes["auth_invitations_constraint"];
   ["auth_invitations_insert_input"]: ValueTypes["auth_invitations_insert_input"];
+  ["auth_invitations_obj_rel_insert_input"]: ValueTypes["auth_invitations_obj_rel_insert_input"];
   ["auth_invitations_on_conflict"]: ValueTypes["auth_invitations_on_conflict"];
   ["auth_invitations_order_by"]: ValueTypes["auth_invitations_order_by"];
   ["auth_invitations_select_column"]: ValueTypes["auth_invitations_select_column"];
@@ -20185,6 +20690,7 @@ type ZEUS_VARIABLES = {
   ["auth_public_keys_aggregate_bool_exp"]: ValueTypes["auth_public_keys_aggregate_bool_exp"];
   ["auth_public_keys_aggregate_bool_exp_count"]: ValueTypes["auth_public_keys_aggregate_bool_exp_count"];
   ["auth_public_keys_aggregate_order_by"]: ValueTypes["auth_public_keys_aggregate_order_by"];
+  ["auth_public_keys_arr_rel_insert_input"]: ValueTypes["auth_public_keys_arr_rel_insert_input"];
   ["auth_public_keys_avg_order_by"]: ValueTypes["auth_public_keys_avg_order_by"];
   ["auth_public_keys_bool_exp"]: ValueTypes["auth_public_keys_bool_exp"];
   ["auth_public_keys_constraint"]: ValueTypes["auth_public_keys_constraint"];
@@ -20261,15 +20767,21 @@ type ZEUS_VARIABLES = {
   ["auth_users_aggregate_bool_exp"]: ValueTypes["auth_users_aggregate_bool_exp"];
   ["auth_users_aggregate_bool_exp_count"]: ValueTypes["auth_users_aggregate_bool_exp_count"];
   ["auth_users_aggregate_order_by"]: ValueTypes["auth_users_aggregate_order_by"];
+  ["auth_users_arr_rel_insert_input"]: ValueTypes["auth_users_arr_rel_insert_input"];
   ["auth_users_bool_exp"]: ValueTypes["auth_users_bool_exp"];
+  ["auth_users_constraint"]: ValueTypes["auth_users_constraint"];
+  ["auth_users_insert_input"]: ValueTypes["auth_users_insert_input"];
   ["auth_users_max_order_by"]: ValueTypes["auth_users_max_order_by"];
   ["auth_users_min_order_by"]: ValueTypes["auth_users_min_order_by"];
+  ["auth_users_obj_rel_insert_input"]: ValueTypes["auth_users_obj_rel_insert_input"];
+  ["auth_users_on_conflict"]: ValueTypes["auth_users_on_conflict"];
   ["auth_users_order_by"]: ValueTypes["auth_users_order_by"];
   ["auth_users_pk_columns_input"]: ValueTypes["auth_users_pk_columns_input"];
   ["auth_users_select_column"]: ValueTypes["auth_users_select_column"];
   ["auth_users_set_input"]: ValueTypes["auth_users_set_input"];
   ["auth_users_stream_cursor_input"]: ValueTypes["auth_users_stream_cursor_input"];
   ["auth_users_stream_cursor_value_input"]: ValueTypes["auth_users_stream_cursor_value_input"];
+  ["auth_users_update_column"]: ValueTypes["auth_users_update_column"];
   ["auth_users_updates"]: ValueTypes["auth_users_updates"];
   ["auth_xnft_preferences_bool_exp"]: ValueTypes["auth_xnft_preferences_bool_exp"];
   ["auth_xnft_preferences_constraint"]: ValueTypes["auth_xnft_preferences_constraint"];

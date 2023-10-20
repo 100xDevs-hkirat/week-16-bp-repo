@@ -1,22 +1,14 @@
 import { useEffect, useState } from "react";
-import {
- BACKEND_API_URL,  UI_RPC_METHOD_KEYRING_STORE_CHECK_PASSWORD,
-  UI_RPC_METHOD_PASSWORD_UPDATE } from "@coral-xyz/common";
+import { BACKEND_API_URL , UI_RPC_METHOD_USER_READ } from "@coral-xyz/common";
 import { InputListItem, Inputs, PrimaryButton } from "@coral-xyz/react-common";
 import { useBackgroundClient } from "@coral-xyz/recoil";
-import { useCustomTheme } from "@coral-xyz/themes";
-import { Button, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 
-import { SubtextParagraph } from "../../../common";
-import { useDrawerContext } from "../../../common/Layout/Drawer";
 import { useNavigation } from "../../../common/Layout/NavStack";
 
 export function ChangeName() {
-  const theme = useCustomTheme();
-  const { close } = useDrawerContext();
   const nav = useNavigation();
   const background = useBackgroundClient();
-  const [currentPassword, setCurrentPassword] = useState("");
   const [currentFirstName, setCurrentFirstName] = useState("");
   const [currentLastName, setCurrentLastName] = useState("");
   const [newFirstName, setNewFirstName] = useState("");
@@ -31,41 +23,53 @@ export function ChangeName() {
   }, []);
 
   useEffect(() => {
-    // const res = await fetch(`${BACKEND_API_URL}/users`, {
-    //   method: "POST",
-    //   credentials: "omit",
-    //   body,
-    //   headers: {
-    //     "Content-Type": "application/json",
-    //   },
-    // });
+    async function getNames() {
+      const userCredentials = await background.request({
+        method: UI_RPC_METHOD_USER_READ,
+        params: [],
+      });
+      const user = await fetch(`${BACKEND_API_URL}/users/me`, {
+        method: "GET",
+        headers: {
+          authorization: "Bearer " + userCredentials.jwt,
+          "Content-Type": "application/json",
+        },
+      });
+      const userData = await user.json();
+      setCurrentFirstName(userData.firstname);
+      setCurrentLastName(userData.lastname);
+      setNewFirstName(userData.firstname);
+      setNewLastName(userData.lastname);
+    }
+    getNames();
   }, []);
+
+  const changeName = async () => {
+    const userCredentials = await background.request({
+      method: UI_RPC_METHOD_USER_READ,
+      params: [],
+    });
+    const body = JSON.stringify({
+      firstname: newFirstName,
+      lastname: newLastName,
+    });
+    const res = await fetch(`${BACKEND_API_URL}/users/changeName`, {
+      method: "PUT",
+      //@ts-ignore
+      body: body,
+      headers: {
+        authorization: "Bearer " + userCredentials.jwt,
+        "Content-Type": "application/json",
+      },
+    });
+  };
 
   return (
     <div style={{ paddingTop: "16px", height: "100%" }}>
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          (async () => {
-            const isCurrentCorrect = await background.request({
-              method: UI_RPC_METHOD_KEYRING_STORE_CHECK_PASSWORD,
-              params: [currentPassword],
-            });
-
-            // setCurrentPasswordError(!isCurrentCorrect);
-            // setPasswordMismatchError(mismatchError);
-
-            // if (!isCurrentCorrect || mismatchError) {
-            //   return;
-            // }
-
-            // await background.request({
-            //   method: UI_RPC_METHOD_PASSWORD_UPDATE,
-            //   params: [currentPassword, newPw1],
-            // });
-
-            close();
-          })();
+          changeName();
         }}
         style={{ display: "flex", height: "100%", flexDirection: "column" }}
       >
@@ -77,6 +81,7 @@ export function ChangeName() {
             <InputListItem
               isFirst
               isDisabled
+              cursor="not-allowed"
               value={currentFirstName}
               onChange={(e) => {}}
               placeholder="First Name"
@@ -104,6 +109,7 @@ export function ChangeName() {
             <InputListItem
               isFirst
               isDisabled
+              cursor="not-allowed"
               value={currentLastName}
               onChange={(e) => {}}
               placeholder="Last Name"

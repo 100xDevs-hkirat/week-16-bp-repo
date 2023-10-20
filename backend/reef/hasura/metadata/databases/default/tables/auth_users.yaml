@@ -91,7 +91,9 @@ select_permissions:
     permission:
       columns:
         - created_at
+        - firstname
         - id
+        - lastname
         - username
       filter: {}
       allow_aggregations: true

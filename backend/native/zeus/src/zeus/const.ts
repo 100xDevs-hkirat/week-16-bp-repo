@@ -200,6 +200,11 @@ export const AllTypesProps: Record<string, any> = {
     created_at: "timestamptz",
     data: "jsonb",
     id: "uuid",
+    user: "auth_users_obj_rel_insert_input",
+  },
+  auth_invitations_obj_rel_insert_input: {
+    data: "auth_invitations_insert_input",
+    on_conflict: "auth_invitations_on_conflict",
   },
   auth_invitations_on_conflict: {
     constraint: "auth_invitations_constraint",
@@ -400,6 +405,10 @@ export const AllTypesProps: Record<string, any> = {
     var_samp: "auth_public_keys_var_samp_order_by",
     variance: "auth_public_keys_variance_order_by",
   },
+  auth_public_keys_arr_rel_insert_input: {
+    data: "auth_public_keys_insert_input",
+    on_conflict: "auth_public_keys_on_conflict",
+  },
   auth_public_keys_avg_order_by: {
     id: "order_by",
   },
@@ -420,6 +429,7 @@ export const AllTypesProps: Record<string, any> = {
   },
   auth_public_keys_constraint: "enum" as const,
   auth_public_keys_insert_input: {
+    user: "auth_users_obj_rel_insert_input",
     user_active_publickey_mappings:
       "auth_user_active_publickey_mapping_arr_rel_insert_input",
     user_id: "uuid",
@@ -743,14 +753,20 @@ export const AllTypesProps: Record<string, any> = {
     max: "auth_users_max_order_by",
     min: "auth_users_min_order_by",
   },
+  auth_users_arr_rel_insert_input: {
+    data: "auth_users_insert_input",
+    on_conflict: "auth_users_on_conflict",
+  },
   auth_users_bool_exp: {
     _and: "auth_users_bool_exp",
     _not: "auth_users_bool_exp",
     _or: "auth_users_bool_exp",
     created_at: "timestamptz_comparison_exp",
     dropzone_public_key: "auth_public_keys_bool_exp",
+    firstname: "String_comparison_exp",
     id: "uuid_comparison_exp",
     invitation: "auth_invitations_bool_exp",
+    lastname: "String_comparison_exp",
     public_keys: "auth_public_keys_bool_exp",
     public_keys_aggregate: "auth_public_keys_aggregate_bool_exp",
     referred_users: "auth_users_bool_exp",
@@ -758,21 +774,51 @@ export const AllTypesProps: Record<string, any> = {
     referrer: "auth_users_bool_exp",
     username: "citext_comparison_exp",
   },
+  auth_users_constraint: "enum" as const,
+  auth_users_insert_input: {
+    avatar_nft: "citext",
+    created_at: "timestamptz",
+    id: "uuid",
+    invitation: "auth_invitations_obj_rel_insert_input",
+    invitation_id: "uuid",
+    last_active_at: "timestamptz",
+    public_keys: "auth_public_keys_arr_rel_insert_input",
+    referred_users: "auth_users_arr_rel_insert_input",
+    referrer: "auth_users_obj_rel_insert_input",
+    referrer_id: "uuid",
+    updated_at: "timestamptz",
+    username: "citext",
+  },
   auth_users_max_order_by: {
     created_at: "order_by",
+    firstname: "order_by",
     id: "order_by",
+    lastname: "order_by",
     username: "order_by",
   },
   auth_users_min_order_by: {
     created_at: "order_by",
+    firstname: "order_by",
     id: "order_by",
+    lastname: "order_by",
     username: "order_by",
+  },
+  auth_users_obj_rel_insert_input: {
+    data: "auth_users_insert_input",
+    on_conflict: "auth_users_on_conflict",
+  },
+  auth_users_on_conflict: {
+    constraint: "auth_users_constraint",
+    update_columns: "auth_users_update_column",
+    where: "auth_users_bool_exp",
   },
   auth_users_order_by: {
     created_at: "order_by",
     dropzone_public_key_aggregate: "auth_public_keys_aggregate_order_by",
+    firstname: "order_by",
     id: "order_by",
     invitation: "auth_invitations_order_by",
+    lastname: "order_by",
     public_keys_aggregate: "auth_public_keys_aggregate_order_by",
     referred_users_aggregate: "auth_users_aggregate_order_by",
     referrer: "auth_users_order_by",
@@ -795,6 +841,7 @@ export const AllTypesProps: Record<string, any> = {
     id: "uuid",
     username: "citext",
   },
+  auth_users_update_column: "enum" as const,
   auth_users_updates: {
     _set: "auth_users_set_input",
     where: "auth_users_bool_exp",
@@ -1114,6 +1161,14 @@ export const AllTypesProps: Record<string, any> = {
     insert_auth_user_nfts_one: {
       object: "auth_user_nfts_insert_input",
       on_conflict: "auth_user_nfts_on_conflict",
+    },
+    insert_auth_users: {
+      objects: "auth_users_insert_input",
+      on_conflict: "auth_users_on_conflict",
+    },
+    insert_auth_users_one: {
+      object: "auth_users_insert_input",
+      on_conflict: "auth_users_on_conflict",
     },
     insert_auth_xnft_preferences: {
       objects: "auth_xnft_preferences_insert_input",
@@ -2042,8 +2097,10 @@ export const ReturnTypes: Record<string, any> = {
   auth_users: {
     created_at: "timestamptz",
     dropzone_public_key: "auth_public_keys",
+    firstname: "String",
     id: "uuid",
     invitation: "auth_invitations",
+    lastname: "String",
     public_keys: "auth_public_keys",
     public_keys_aggregate: "auth_public_keys_aggregate",
     referred_users: "auth_users",
@@ -2062,12 +2119,16 @@ export const ReturnTypes: Record<string, any> = {
   },
   auth_users_max_fields: {
     created_at: "timestamptz",
+    firstname: "String",
     id: "uuid",
+    lastname: "String",
     username: "citext",
   },
   auth_users_min_fields: {
     created_at: "timestamptz",
+    firstname: "String",
     id: "uuid",
+    lastname: "String",
     username: "citext",
   },
   auth_users_mutation_response: {
@@ -2198,6 +2259,8 @@ export const ReturnTypes: Record<string, any> = {
       "auth_user_active_publickey_mapping",
     insert_auth_user_nfts: "auth_user_nfts_mutation_response",
     insert_auth_user_nfts_one: "auth_user_nfts",
+    insert_auth_users: "auth_users_mutation_response",
+    insert_auth_users_one: "auth_users",
     insert_auth_xnft_preferences: "auth_xnft_preferences_mutation_response",
     insert_auth_xnft_preferences_one: "auth_xnft_preferences",
     insert_auth_xnft_secrets: "auth_xnft_secrets_mutation_response",

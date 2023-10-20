@@ -182,6 +182,8 @@ export const getUserByUsername = async (username: string) => {
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
@@ -212,6 +214,8 @@ export const getUser = async (id: string, onlyActiveKeys?: boolean) => {
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
@@ -251,6 +255,8 @@ const transformUsers = (
   users: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -268,6 +274,8 @@ const transformUser = (
   user: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -279,6 +287,8 @@ const transformUser = (
   return {
     id: user.id,
     username: user.username,
+    firstname: user.firstname,
+    lastname: user.lastname,
     // Camelcase public keys for response
     publicKeys: user.public_keys
       .map((k) => ({
@@ -485,6 +495,35 @@ export async function updateUserAvatar({
         },
         _set: {
           avatar_nft: avatar,
+        },
+      },
+      {
+        affected_rows: true,
+      },
+    ],
+  });
+
+  return response.update_auth_users;
+}
+
+/**
+ * Update user's firstname and lastname
+ */
+
+export async function updateUserName(
+  userId: string,
+  firstname: string,
+  lastname: string
+) {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+        _set: {
+          firstname: firstname,
+          lastname: lastname,
         },
       },
       {
