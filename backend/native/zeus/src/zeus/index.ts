@@ -51,7 +51,7 @@ const handleFetchResponse = (response: Response): Promise<GraphQLResponse> => {
         .catch(reject);
     });
   }
-  return response.json();
+  return response.json() as Promise<GraphQLResponse>;
 };
 
 export const apiFetch =
@@ -362,12 +362,17 @@ export const traverseResponse = ({
     ) {
       return o;
     }
-    return Object.fromEntries(
-      Object.entries(o).map(([k, v]) => [
-        k,
-        ibb(k, v, [...p, purifyGraphQLKey(k)]),
-      ])
+    const entries = Object.entries(o).map(
+      ([k, v]) => [k, ibb(k, v, [...p, purifyGraphQLKey(k)])] as const
     );
+    const objectFromEntries = entries.reduce<Record<string, unknown>>(
+      (a, [k, v]) => {
+        a[k] = v;
+        return a;
+      },
+      {}
+    );
+    return objectFromEntries;
   };
   return ibb;
 };
@@ -759,8 +764,8 @@ export const resolverFor = <
     source: any
   ) => Z extends keyof ModelTypes[T]
     ? ModelTypes[T][Z] | Promise<ModelTypes[T][Z]> | X
-    : any
-) => fn as (args?: any, source?: any) => any;
+    : never
+) => fn as (args?: any, source?: any) => ReturnType<typeof fn>;
 
 export type UnwrapPromise<T> = T extends Promise<infer R> ? R : T;
 export type ZeusState<T extends (...args: any[]) => Promise<any>> = NonNullable<
@@ -816,9 +821,13 @@ type IsInterfaced<
                 : DST[P],
               SCLR
             >
-          : Record<string, unknown>
+          : IsArray<
+              R,
+              "__typename" extends keyof DST ? { __typename: true } : never,
+              SCLR
+            >
         : never;
-    }[keyof DST] & {
+    }[keyof SRC] & {
       [P in keyof Omit<
         Pick<
           SRC,
@@ -4317,6 +4326,7 @@ export type ValueTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined | null | Variable<any, string>;
     invitation?:
       | ValueTypes["auth_invitations_obj_rel_insert_input"]
       | undefined
@@ -4327,6 +4337,7 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
     public_keys?:
       | ValueTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined
@@ -11097,11 +11108,13 @@ export type ResolverInputTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined | null;
     invitation?:
       | ResolverInputTypes["auth_invitations_obj_rel_insert_input"]
       | undefined
       | null;
     invitation_id?: ResolverInputTypes["uuid"] | undefined | null;
+    lastname?: string | undefined | null;
     public_keys?:
       | ResolverInputTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined
@@ -16048,10 +16061,12 @@ export type ModelTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined;
     invitation?:
       | ModelTypes["auth_invitations_obj_rel_insert_input"]
       | undefined;
     invitation_id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     public_keys?:
       | ModelTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined;
@@ -18949,10 +18964,12 @@ export type GraphQLTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined;
     invitation?:
       | GraphQLTypes["auth_invitations_obj_rel_insert_input"]
       | undefined;
     invitation_id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     public_keys?:
       | GraphQLTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined;
