@@ -31,6 +31,7 @@ import {
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserName,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -124,7 +125,7 @@ router.get("/jwt/xnft", extractUserId, async (req, res) => {
  * Create a new user.
  */
 router.post("/", async (req, res) => {
-  const { username, waitlistId, blockchainPublicKeys } =
+  const { username, firstName, lastName, waitlistId, blockchainPublicKeys } =
     CreateUserWithPublicKeys.parse(req.body);
 
   // Validate all the signatures
@@ -182,6 +183,8 @@ router.post("/", async (req, res) => {
 
   const user = await createUser(
     username,
+    firstName,
+    lastName,
     blockchainPublicKeys.map((b) => ({
       ...b,
       // Cast blockchain to correct type
@@ -254,6 +257,22 @@ router.get("/me", extractUserId, async (req: Request, res: Response) => {
   }
   return res.status(404).json({ msg: "User not found" });
 });
+
+/**
+ * Updates firstname and lastname of user in database
+ */
+
+router.put(
+  "/changeName",
+  extractUserId,
+  async (req: Request, res: Response) => {
+    const id = req.id || "";
+    const firstname = req.body.firstname;
+    const lastname = req.body.lastname;
+    await updateUserName(id, firstname, lastname);
+    return res.status(201).end();
+  }
+);
 
 router.get("/primarySolPubkey/:username", async (req, res) => {
   const username = req.params.username;

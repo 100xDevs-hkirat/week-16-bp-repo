@@ -171,7 +171,6 @@ export class KeyringStore {
     jwt: string
   ) {
     this.password = password;
-
     // Setup the user.
     await this._usernameKeyringCreate(username, keyringInit, uuid, jwt);
 

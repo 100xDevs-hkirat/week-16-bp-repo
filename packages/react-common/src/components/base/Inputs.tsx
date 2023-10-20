@@ -70,6 +70,8 @@ interface InputListItemProps {
   isFirst?: boolean;
   title: string;
   value: string;
+  cursor?: string;
+  isDisabled?: boolean;
   placeholder: string;
   onChange: (e: any) => void;
   button: boolean;
@@ -84,6 +86,8 @@ export const InputListItem = ({
   onChange,
   button = false,
   placeholder,
+  cursor = "default",
+  isDisabled = false,
   type = "text",
 }: InputListItemProps) => {
   const theme = useCustomTheme();
@@ -95,11 +99,15 @@ export const InputListItem = ({
     <ListItem
       isLast={isLast}
       isFirst={isFirst}
+      disabled={isDisabled}
       style={{
         height: "46px",
         padding: "10px",
+        backgroundColor:
+          cursor == "default" ? "#FFFFFF" : "rgba(107,107,107,0.4)",
+        cursor: cursor,
       }}
-      radius={"8px"}
+      radius="8px"
       button={button}
     >
       <Typography style={{ width: "80px" }}>{title}</Typography>
@@ -255,14 +263,14 @@ export const TextInput = ({
       >
         {children}
       </TextField>
-      {errorMessage && (
+      {errorMessage ? (
         <Typography
           sx={{ color: theme.custom.colors.negative }}
           style={{ marginLeft: 5 }}
         >
           {errorMessage}
         </Typography>
-      )}
+      ) : null}
     </>
   );
 };

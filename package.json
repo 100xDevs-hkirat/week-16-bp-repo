@@ -77,6 +77,8 @@
     "yarn": "^1.22.17"
   },
   "dependencies": {
+    "@noble/curves": "^1.2.0",
+    "canvas": "^2.11.2",
     "patch-package": "^6.5.0"
   }
 }
