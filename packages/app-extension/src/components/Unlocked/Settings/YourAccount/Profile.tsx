@@ -74,7 +74,7 @@ const Profile = () => {
           <PrimaryButton
             label="Change profile"
             type="submit"
-            disabled={firstName.length === 0 ? lastName.length === 0 : null}
+            disabled={firstName.length === 0 && lastName.length === 0 ? true: false}
           />
         </div>
       </form>
