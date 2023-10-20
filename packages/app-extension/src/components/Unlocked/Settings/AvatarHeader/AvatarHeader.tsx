@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { ProxyImage } from "@coral-xyz/react-common";
-import { useAvatarUrl, useUser } from "@coral-xyz/recoil";
+import { useAvatarUrl, useUser, useUserProfile } from "@coral-xyz/recoil";
 import type { CustomTheme } from "@coral-xyz/themes";
 import { styled, useCustomTheme } from "@coral-xyz/themes";
 import { Edit } from "@mui/icons-material";
@@ -18,6 +18,7 @@ const title = "Change Profile Picture";
 
 export function AvatarHeader() {
   const user = useUser();
+  const userProfile = useUserProfile();
   const theme = useCustomTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
   const avatarUrl = useAvatarUrl(64);
@@ -46,6 +47,15 @@ export function AvatarHeader() {
           <Edit />
         </EditOverlay>
       </AvatarWrapper>
+      <Typography
+        variant="h6"
+        style={{
+          textAlign: "center",
+          textTransform: "uppercase",
+        }}
+      >
+        {`${userProfile?.firstName} ${userProfile?.lastName}`}
+      </Typography>
       <Typography
         style={{
           color: theme.custom.colors.fontColor,

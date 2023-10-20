@@ -61,6 +61,7 @@ import {
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_DELETED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEYS_UPDATED,
+  NOTIFICATION_USER_PROFILE_UPDATED,
   NOTIFICATION_XNFT_PREFERENCE_UPDATED,
   SolanaCluster,
   SolanaExplorer,
@@ -1535,11 +1536,55 @@ export class Backend {
     });
 
     this.events.emit(BACKEND_EVENT, {
+      name: NOTIFICATION_USER_PROFILE_UPDATED,
+      data: {
+        firstName: json.firstname,
+        lastName: json.lastname,
+      },
+    });
+
+    this.events.emit(BACKEND_EVENT, {
       name: NOTIFICATION_USER_ACCOUNT_PUBLIC_KEYS_UPDATED,
       data: {
         publicKeys: json.publicKeys,
       },
     });
+    return json;
+  }
+
+  /**
+   * Update Authenticated User Profile
+   */
+  async userProfileUpdate(firstName?: string, lastName?: string) {
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    const response = await fetch(`${BACKEND_API_URL}/users/profile`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify({
+        firstName,
+        lastName,
+      }),
+    });
+
+    if (response.status === 403) {
+      throw new Error("user not authenticated");
+    } else if (response.status === 404) {
+      // User does not exist on server, how to handle?
+      throw new Error("user does not exist");
+    } else if (response.status !== 200) {
+      throw new Error(`could not fetch user`);
+    }
+    const json = await response.json();
+
+    this.events.emit(BACKEND_EVENT, {
+      name: NOTIFICATION_USER_PROFILE_UPDATED,
+      data: {
+        ...json,
+      },
+    });
+
     return json;
   }
 

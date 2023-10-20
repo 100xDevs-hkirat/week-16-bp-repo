@@ -31,6 +31,7 @@ import {
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserProfile,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -124,7 +125,7 @@ router.get("/jwt/xnft", extractUserId, async (req, res) => {
  * Create a new user.
  */
 router.post("/", async (req, res) => {
-  const { username, waitlistId, blockchainPublicKeys } =
+  const { username, waitlistId, blockchainPublicKeys, firstName, lastName } =
     CreateUserWithPublicKeys.parse(req.body);
 
   // Validate all the signatures
@@ -182,6 +183,8 @@ router.post("/", async (req, res) => {
 
   const user = await createUser(
     username,
+    firstName,
+    lastName,
     blockchainPublicKeys.map((b) => ({
       ...b,
       // Cast blockchain to correct type
@@ -247,7 +250,10 @@ router.get("/userById", extractUserId, async (req: Request, res: Response) => {
 router.get("/me", extractUserId, async (req: Request, res: Response) => {
   if (req.id) {
     try {
-      return res.json({ ...(await getUser(req.id)), jwt: req.jwt });
+      return res.json({
+        ...(await getUser(req.id)),
+        jwt: req.jwt,
+      });
     } catch {
       // User not found
     }
@@ -372,6 +378,29 @@ router.post("/avatar", extractUserId, async (req: Request, res: Response) => {
   });
 
   return res.status(201).end();
+});
+
+/**
+ * Update profile of the currently authenticated user.
+ */
+
+router.post("/profile", extractUserId, async (req: Request, res: Response) => {
+  if (req.id) {
+    try {
+      const resp = await updateUserProfile({
+        userId: req.id!,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+      });
+      return res.json({
+        firstName: resp?.returning[0]?.firstname,
+        lastName: resp?.returning[0]?.lastname,
+      });
+    } catch (error) {
+      // Couldn't update the user
+    }
+  }
+  return res.status(404).json({ msg: "User not found" });
 });
 
 router.post("/metadata", async (req: Request, res: Response) => {

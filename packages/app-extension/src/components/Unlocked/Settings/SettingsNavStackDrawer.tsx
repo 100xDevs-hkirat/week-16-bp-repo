@@ -13,7 +13,7 @@ import { ContactRequests, Contacts } from "../Messages/Contacts";
 import { Requests } from "../Messages/Requests";
 
 import { CreateMenu } from "./AddConnectWallet/CreateMenu";
-import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic"
+import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic";
 import { ImportMenu } from "./AddConnectWallet/ImportMenu";
 import { ImportMnemonic } from "./AddConnectWallet/ImportMnemonic";
 import { ImportSecretKey } from "./AddConnectWallet/ImportSecretKey";
@@ -32,6 +32,7 @@ import { ChangePassword } from "./YourAccount/ChangePassword";
 import { RemoveWallet } from "./YourAccount/EditWallets/RemoveWallet";
 import { RenameWallet } from "./YourAccount/EditWallets/RenameWallet";
 import { WalletDetail } from "./YourAccount/EditWallets/WalletDetail";
+import Profile from "./YourAccount/Profile";
 import {
   ShowPrivateKey,
   ShowPrivateKeyWarning,
@@ -233,6 +234,10 @@ export function SettingsNavStackDrawer({
           <NavStackScreen
             name="about-backpack"
             component={(props: any) => <AboutBackpack {...props} />}
+          />
+          <NavStackScreen
+            name="user-profile"
+            component={(props: any) => <Profile {...props} />}
           />
         </NavStackEphemeral>
       </div>

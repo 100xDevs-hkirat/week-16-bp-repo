@@ -105,6 +105,7 @@ import {
   UI_RPC_METHOD_USER_ACCOUNT_PUBLIC_KEY_DELETE,
   UI_RPC_METHOD_USER_ACCOUNT_READ,
   UI_RPC_METHOD_USER_JWT_UPDATE,
+  UI_RPC_METHOD_USER_PROFILE_UPDATE,
   UI_RPC_METHOD_USER_READ,
   UI_RPC_METHOD_USERNAME_ACCOUNT_CREATE,
   withContextPort,
@@ -358,6 +359,13 @@ async function handle<T = any>(
     case UI_RPC_METHOD_USER_ACCOUNT_READ:
       // @ts-ignore
       return await handleUserAccountRead(ctx, ...params);
+
+    //
+    // Profile.
+    //
+    case UI_RPC_METHOD_USER_PROFILE_UPDATE:
+      // @ts-ignore
+      return await handleUserProfileUpdate(ctx, ...params);
     case UI_RPC_METHOD_FIND_SERVER_PUBLIC_KEY_CONFLICTS:
       // @ts-ignore
       return await handleFindServerPublicKeyConflicts(ctx, ...params);
@@ -661,6 +669,14 @@ async function handleUserAccountRead(
   ...args: Parameters<Backend["userAccountRead"]>
 ): Promise<RpcResponse<string>> {
   const resp = await ctx.backend.userAccountRead(...args);
+  return [resp];
+}
+
+async function handleUserProfileUpdate(
+  ctx: Context<Backend>,
+  ...args: Parameters<Backend["userProfileUpdate"]>
+): Promise<RpcResponse<string>> {
+  const resp = await ctx.backend.userProfileUpdate(...args);
   return [resp];
 }
 
