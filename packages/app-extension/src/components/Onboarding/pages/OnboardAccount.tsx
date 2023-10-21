@@ -77,8 +77,8 @@ export const OnboardAccount = ({
     <UsernameForm
       key="UsernameForm"
       inviteCode={inviteCode!}
-      onNext={(username) => {
-        setOnboardingData({ username });
+      onNext={(username, firstName, lastName) => {
+        setOnboardingData({ username, firstName, lastName });
         nextStep();
       }}
     />,
@@ -160,80 +160,5 @@ export const OnboardAccount = ({
     return <AlreadyOnboarded />;
   }
 
-  return (
-    <WithNav
-      navButtonLeft={
-        step > 0 && step !== steps.length - 1 ? (
-          <NavBackButton onClick={prevStep} />
-        ) : undefined
-      }
-      {...navProps}
-      // Only display the onboarding menu on the first step
-      navButtonRight={step === 0 ? navProps.navButtonRight : undefined}
-    >
-      {steps[step]}
-
-      <WithContaineredDrawer
-        containerRef={containerRef}
-        openDrawer={openDrawer}
-        setOpenDrawer={setOpenDrawer}
-        paperStyles={{
-          height: "calc(100% - 56px)",
-          borderTopLeftRadius: "12px",
-          borderTopRightRadius: "12px",
-        }}
-      >
-        {keyringType === "ledger" ? (
-          <HardwareOnboard
-            blockchain={blockchain!}
-            // @ts-expect-error not assignable to type string ...
-            action={action}
-            signMessage={(publicKey: string) => getCreateMessage(publicKey)}
-            signText="Sign the message to authenticate with Backpack."
-            onClose={() => setOpenDrawer(false)}
-            onComplete={(signedWalletDescriptor: SignedWalletDescriptor) => {
-              setOnboardingData({
-                signedWalletDescriptors: [
-                  ...signedWalletDescriptors,
-                  signedWalletDescriptor,
-                ],
-              });
-              setOpenDrawer(false);
-            }}
-          />
-        ) : (
-          <ImportWallets
-            blockchain={blockchain!}
-            mnemonic={mnemonic!}
-            allowMultiple={false}
-            onNext={async (walletDescriptors: Array<WalletDescriptor>) => {
-              // Should only be one public key path
-              const walletDescriptor = walletDescriptors[0];
-              const signature = await signMessageForWallet(
-                walletDescriptor.blockchain,
-                walletDescriptor.publicKey,
-                getCreateMessage(walletDescriptor.publicKey),
-                {
-                  mnemonic: mnemonic!,
-                  signedWalletDescriptors: [
-                    { ...walletDescriptor, signature: "" },
-                  ],
-                }
-              );
-              setOnboardingData({
-                signedWalletDescriptors: [
-                  ...signedWalletDescriptors,
-                  {
-                    ...walletDescriptor,
-                    signature,
-                  },
-                ],
-              });
-              setOpenDrawer(false);
-            }}
-          />
-        )}
-      </WithContaineredDrawer>
-    </WithNav>
-  );
+  return <div>{steps[step]}</div>;
 };
