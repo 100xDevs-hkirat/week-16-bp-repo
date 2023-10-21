@@ -13,7 +13,7 @@ import { ContactRequests, Contacts } from "../Messages/Contacts";
 import { Requests } from "../Messages/Requests";
 
 import { CreateMenu } from "./AddConnectWallet/CreateMenu";
-import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic"
+import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic";
 import { ImportMenu } from "./AddConnectWallet/ImportMenu";
 import { ImportMnemonic } from "./AddConnectWallet/ImportMnemonic";
 import { ImportSecretKey } from "./AddConnectWallet/ImportSecretKey";
@@ -27,6 +27,7 @@ import { PreferencesSolanaConnection } from "./Preferences/Solana/ConnectionSwit
 import { PreferenceSolanaCustomRpcUrl } from "./Preferences/Solana/CustomRpcUrl";
 import { PreferencesSolanaExplorer } from "./Preferences/Solana/Explorer";
 import { PreferencesTrustedSites } from "./Preferences/TrustedSites";
+import { UpdateProfile } from "./Preferences/UpdateProfile";
 import { XnftDetail } from "./Xnfts/Detail";
 import { ChangePassword } from "./YourAccount/ChangePassword";
 import { RemoveWallet } from "./YourAccount/EditWallets/RemoveWallet";
@@ -105,6 +106,10 @@ export function SettingsNavStackDrawer({
           <NavStackScreen
             name="preferences-trusted-sites"
             component={(props: any) => <PreferencesTrustedSites {...props} />}
+          />
+          <NavStackScreen
+            name="preferences-update-user"
+            component={(props: any) => <UpdateProfile {...props} />}
           />
           <NavStackScreen
             name="preferences-solana"
