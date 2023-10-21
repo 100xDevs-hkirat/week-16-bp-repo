@@ -30,6 +30,7 @@ import {
   getUsersByPrefix,
   getUsersByPublicKeys,
   getUsersMetadata,
+  updateMetadata,
   updateUserAvatar,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
@@ -108,6 +109,28 @@ router.get("/", extractUserId, async (req, res) => {
   res.json({
     users: usersWithFriendshipMetadata,
   });
+});
+
+router.get("/metadata", extractUserId, async (req, res) => {
+  // @ts-ignore
+  const uuid = req.id as string;
+  const userMetadata = await getUser(uuid);
+  res.json({
+    username: userMetadata.username,
+    firstName: userMetadata.firstname,
+    lastName: userMetadata.lastname,
+  });
+});
+
+router.put("/metadata", extractUserId, async (req, res) => {
+  // @ts-ignore
+  const uuid = req.id as string;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+
+  await updateMetadata(uuid, firstName, lastName);
+
+  res.json({});
 });
 
 router.get("/jwt/xnft", extractUserId, async (req, res) => {

@@ -468,6 +468,29 @@ export async function createUserPublicKey({
   return response.insert_auth_public_keys_one;
 }
 
+export const updateMetadata = async (
+  uuid: string,
+  firstName: string,
+  lastName: string
+) => {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: uuid },
+        },
+        _set: {
+          firstname: firstName,
+          lastname: lastName,
+        },
+      },
+      {
+        affected_rows: true,
+      },
+    ],
+  });
+};
+
 /**
  * Update avatar_nft of a user.
  */

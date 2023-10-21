@@ -13,7 +13,7 @@ import { ContactRequests, Contacts } from "../Messages/Contacts";
 import { Requests } from "../Messages/Requests";
 
 import { CreateMenu } from "./AddConnectWallet/CreateMenu";
-import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic"
+import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic";
 import { ImportMenu } from "./AddConnectWallet/ImportMenu";
 import { ImportMnemonic } from "./AddConnectWallet/ImportMnemonic";
 import { ImportSecretKey } from "./AddConnectWallet/ImportSecretKey";
@@ -43,6 +43,7 @@ import {
 import { AboutBackpack } from "./AboutBackpack";
 import { AddConnectPreview, AddConnectWalletMenu } from "./AddConnectWallet";
 import { Preferences } from "./Preferences";
+import { UpdateProfile } from "./UpdateProfile";
 import { XnftSettings } from "./Xnfts";
 import { YourAccount } from "./YourAccount";
 import { SettingsMenu } from ".";
@@ -105,6 +106,10 @@ export function SettingsNavStackDrawer({
           <NavStackScreen
             name="preferences-trusted-sites"
             component={(props: any) => <PreferencesTrustedSites {...props} />}
+          />
+          <NavStackScreen
+            name="preferences-update-profile"
+            component={(props: any) => <UpdateProfile {...props} />}
           />
           <NavStackScreen
             name="preferences-solana"
