@@ -2,8 +2,6 @@ import {
   deleteChat,
   enrichMessages,
   postChat,
-  updateLatestMessage,
-  updateLatestMessageGroup,
 } from "@coral-xyz/backend-common";
 import type {
   MessageKind,
@@ -164,6 +162,10 @@ export class RedisSubscriptionManager {
       message_metadata?: MessageMetadata;
     }
   ) {
+    console.log("add chat message");
+    console.log(id);
+    console.log(userId);
+    console.log(room);
     const roomValidation =
       this.postSubscriptions.get(`${id}-${type}-${room}`) ?? null;
     if (!roomValidation) {
