@@ -6,20 +6,21 @@ import {
   SecondaryButton,
   TextInput,
 } from "@coral-xyz/react-common";
-import { useAutoLockSettings, useBackgroundClient } from "@coral-xyz/recoil";
+import { metadataAtom,useAutoLockSettings, useBackgroundClient  } from "@coral-xyz/recoil";
 import { useCustomTheme } from "@coral-xyz/themes";
 import { LockClock } from "@mui/icons-material";
 import { Typography } from "@mui/material";
+import { useRecoilValue } from "recoil";
 
 import { useNavigation } from "../../../common/Layout/NavStack";
 
 import { Checkmark } from "./Solana/ConnectionSwitch";
-
 export function UpdateProfile() {
   const nav = useNavigation();
   const theme = useCustomTheme();
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
+  const initialMetadata = useRecoilValue(metadataAtom);
+  const [firstName, setFirstName] = useState(initialMetadata.firstName);
+  const [lastName, setLastName] = useState(initialMetadata.lastName);
 
   useEffect(() => {
     nav.setOptions({ headerTitle: "Update User" });

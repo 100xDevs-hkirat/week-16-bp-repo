@@ -56,17 +56,6 @@ export class User {
       this,
       `INDIVIDUAL_${this.userId}`
     );
-    const collections = await getNftCollections(this.userId);
-    const uniqueCollections = collections
-      .filter((x, index) => collections.indexOf(x) === index)
-      .filter((x) => x);
-
-    uniqueCollections.forEach((c) =>
-      RedisSubscriptionManager.getInstance().subscribe(this, `COLLECTION_${c}`)
-    );
-    DEFAULT_GROUP_CHATS.forEach(({ id }) =>
-      RedisSubscriptionManager.getInstance().subscribe(this, `COLLECTION_${id}`)
-    );
   }
 
   private async handleMessage(message: ToServer) {
@@ -162,43 +151,21 @@ export class User {
         }
         await this.validateOwnership(
           message.payload.room,
-          message.payload.type,
-          message.payload.publicKey,
-          message.payload.mint
+          message.payload.type
         );
         break;
     }
   }
 
-  async validateOwnership(
-    room: string,
-    type: SubscriptionType,
-    publicKey?: string,
-    mint?: string
-  ) {
-    let roomValidation = false;
-    if (type === "individual") {
-      // @ts-ignore
-      roomValidation = await validateRoom(
-        this.userId,
-        //@ts-ignore (all individual rooms are stored as integers)
-        room as number
-      );
-      if (!roomValidation) {
-        console.log(`User ${this.userId} doesn't have access to room ${room} `);
-        return;
-      }
-    } else {
-      if (DEFAULT_GROUP_CHATS.map((x) => x.id).includes(room)) {
-        roomValidation = true;
-      } else if (WHITELISTED_CHAT_COLLECTIONS.map((x) => x.id).includes(room)) {
-        roomValidation = await validateCentralizedGroupOwnership(
-          this.userId,
-          room
-        );
-      } else {
-        roomValidation = await validateCollectionOwnership(this.userId, room);
-      }
+  async validateOwnership(room: string, type: SubscriptionType) {
+    let roomValidation = await validateRoom(
+      this.userId,
+      //@ts-ignore (all individual rooms are stored as integers)
+      room as number
+    );
+    if (!roomValidation?.user1) {
+      console.log(`User ${this.userId} doesn't have access to room ${room} `);
+      return;
     }
     if (roomValidation) {
       this.subscriptions.push({

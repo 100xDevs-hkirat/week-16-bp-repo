@@ -166,10 +166,12 @@ export class RedisSubscriptionManager {
   ) {
     const roomValidation =
       this.postSubscriptions.get(`${id}-${type}-${room}`) ?? null;
-    // if (!roomValidation) {
-    //     console.log(`User ${id} hasn't post subscribed to room number ${id}, type: ${type}`);
-    //     return;
-    // }
+    if (!roomValidation) {
+      console.log(
+        `User ${id} hasn't post subscribed to room number ${id}, type: ${type}`
+      );
+      return;
+    }
     //TODO: bulkify this
     postChat(
       room.toString(),
@@ -181,34 +183,6 @@ export class RedisSubscriptionManager {
       msg.message_metadata,
       msg.parent_client_generated_uuid
     );
-
-    if (type === "individual") {
-      updateLatestMessage(
-        parseInt(room),
-        msg.message_kind === "gif"
-          ? "GIF"
-          : msg.message_kind === "secure-transfer"
-          ? "Secure Transfer"
-          : msg.message_kind === "media"
-          ? "Media"
-          : msg.message,
-        userId,
-        roomValidation,
-        msg.client_generated_uuid
-      );
-    } else {
-      updateLatestMessageGroup(
-        room,
-        msg.message_kind === "gif"
-          ? "GIF"
-          : msg.message_kind === "secure-transfer"
-          ? "Secure Transfer"
-          : msg.message_kind === "media"
-          ? "Media"
-          : msg.message,
-        msg.client_generated_uuid
-      );
-    }
 
     const emittedMessage = (
       await enrichMessages(
@@ -235,40 +209,18 @@ export class RedisSubscriptionManager {
       )
     )[0];
 
-    if (type === "individual") {
-      this.publish(`INDIVIDUAL_${roomValidation?.user2}`, {
-        type: CHAT_MESSAGES,
-        payload: {
-          messages: [emittedMessage],
-        },
-      });
-      this.publish(`INDIVIDUAL_${roomValidation?.user1}`, {
-        type: CHAT_MESSAGES,
-        payload: {
-          messages: [emittedMessage],
-        },
-      });
-    } else {
-      this.publish(`COLLECTION_${room}`, {
-        type: CHAT_MESSAGES,
-        payload: {
-          messages: [emittedMessage],
-        },
-      });
-    }
-
-    setTimeout(async () => {
-      await Redis.getInstance().send(
-        JSON.stringify({
-          type: "message",
-          payload: {
-            type: type,
-            room: room,
-            client_generated_uuid: msg.client_generated_uuid,
-          },
-        })
-      );
-    }, 1000);
+    this.publish(`INDIVIDUAL_${roomValidation?.user2}`, {
+      type: CHAT_MESSAGES,
+      payload: {
+        messages: [emittedMessage],
+      },
+    });
+    this.publish(`INDIVIDUAL_${roomValidation?.user1}`, {
+      type: CHAT_MESSAGES,
+      payload: {
+        messages: [emittedMessage],
+      },
+    });
   }
 
   publish(room: string, message: ToPubsub) {
