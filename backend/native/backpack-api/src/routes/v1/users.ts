@@ -26,11 +26,13 @@ import {
   getUser,
   getUserByPublicKeyAndChain,
   getUserByUsername,
+  getUserMetadata,
   getUsers,
   getUsersByPrefix,
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserMetadata,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -118,6 +120,23 @@ router.get("/jwt/xnft", extractUserId, async (req, res) => {
   const secret = await getOrcreateXnftSecret(xnftAddress);
   const signedJwt = await jwt.sign({ uuid: uuid }, secret);
   return res.json({ jwt: signedJwt });
+});
+
+router.get("/metadata", extractUserId, async (req, res) => {
+  const userId: string = req.id!;
+  const metadata = await getUserMetadata(userId);
+  res.json({
+    firstName: metadata.firstName,
+    lastName: metadata.lastName,
+  });
+});
+
+router.post("/metadata", extractUserId, async (req, res) => {
+  const userId: string = req.id!;
+  const firstName = req.body.firstName;
+  const lastName = req.body.lastName;
+  await updateUserMetadata(userId, firstName, lastName);
+  res.json({});
 });
 
 /**
