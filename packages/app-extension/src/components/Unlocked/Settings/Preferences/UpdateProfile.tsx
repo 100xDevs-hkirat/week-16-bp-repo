@@ -5,9 +5,11 @@ import { metadataAtom } from "@coral-xyz/recoil";
 import { useCustomTheme } from "@coral-xyz/themes";
 import { useRecoilValue } from "recoil";
 
+import { useNavigation } from "../../../common/Layout/NavStack";
+
 export function PreferencesUpdateProfile() {
   const theme = useCustomTheme();
-
+  const nav = useNavigation();
   const initialMetaData = useRecoilValue(metadataAtom);
   const [firstName, setFirstName] = useState(initialMetaData.firstName);
   const [lastName, setLastName] = useState(initialMetaData.lastName);
@@ -25,6 +27,7 @@ export function PreferencesUpdateProfile() {
           lastName: lastName,
         }),
       });
+      nav.pop();
     } catch (err) {
       console.error(err);
     }
