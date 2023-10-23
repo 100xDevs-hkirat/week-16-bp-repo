@@ -65,7 +65,9 @@ insert_permissions:
     permission:
       check: {}
       columns:
+        - firstname
         - invitation_id
+        - lastname
         - referrer_id
         - username
         - waitlist_id
@@ -82,7 +84,9 @@ select_permissions:
     permission:
       columns:
         - created_at
+        - firstname
         - id
+        - lastname
         - username
       filter: {}
       allow_aggregations: true
@@ -110,6 +114,8 @@ update_permissions:
     permission:
       columns:
         - avatar_nft
+        - firstname
+        - lastname
         - updated_at
       filter: {}
       check: null

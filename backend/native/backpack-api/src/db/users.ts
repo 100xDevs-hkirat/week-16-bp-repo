@@ -297,11 +297,62 @@ const transformUser = (
   };
 };
 
+export const getUserMetadata = async (
+  userId: string
+): Promise<{
+  firstName: string;
+  lastName: string;
+}> => {
+  const response = await chain("query")({
+    auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+      },
+      {
+        id: true,
+        firstname: true,
+        lastname: true,
+      },
+    ],
+  });
+  return {
+    firstName: response.auth_users[0].firstname || "",
+    lastName: response.auth_users[0].lastname || "",
+  };
+};
+
+export const updateUserMetadata = async (
+  userId: string,
+  firstName: string,
+  lastName: string
+) => {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+        _set: {
+          firstname: firstName,
+          lastname: lastName,
+        },
+      },
+      {
+        affected_rows: true,
+      },
+    ],
+  });
+};
+
 /**
  * Create a user
  */
 export const createUser = async (
   username: string,
+  firstName: string,
+  lastName: string,
   blockchainPublicKeys: Array<{ blockchain: Blockchain; publicKey: string }>,
   waitlistId?: string | null,
   referrerId?: string
@@ -329,6 +380,8 @@ export const createUser = async (
       {
         object: {
           username: username,
+          firstname: firstName,
+          lastname: lastName,
           public_keys: {
             data: blockchainPublicKeys.map((b) => ({
               blockchain: b.blockchain,
