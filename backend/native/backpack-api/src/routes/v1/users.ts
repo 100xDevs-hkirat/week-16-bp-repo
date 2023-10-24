@@ -124,7 +124,7 @@ router.get("/jwt/xnft", extractUserId, async (req, res) => {
  * Create a new user.
  */
 router.post("/", async (req, res) => {
-  const { username, waitlistId, blockchainPublicKeys } =
+  const { username, firstname, lastname, waitlistId, blockchainPublicKeys } =
     CreateUserWithPublicKeys.parse(req.body);
 
   // Validate all the signatures
@@ -182,6 +182,8 @@ router.post("/", async (req, res) => {
 
   const user = await createUser(
     username,
+    firstname,
+    lastname,
     blockchainPublicKeys.map((b) => ({
       ...b,
       // Cast blockchain to correct type
