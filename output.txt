@@ -1,0 +1,100 @@
+yarn run v1.22.19
+verbose 0.1983042 Checking for configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\week-16-bp-repo\\.npmrc".
+verbose 0.19868 Found configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\week-16-bp-repo\\.npmrc".
+verbose 0.1992668 Checking for configuration file "C:\\Users\\swara\\.npmrc".
+verbose 0.199528 Found configuration file "C:\\Users\\swara\\.npmrc".
+verbose 0.2000127 Checking for configuration file "C:\\Program Files\\nodejs\\etc\\npmrc".
+verbose 0.2002136 Checking for configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\week-16-bp-repo\\.npmrc".
+verbose 0.200441 Found configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\week-16-bp-repo\\.npmrc".
+verbose 0.2010467 Checking for configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\.npmrc".
+verbose 0.2015519 Checking for configuration file "C:\\Users\\swara\\Desktop\\.npmrc".
+verbose 0.2019593 Checking for configuration file "C:\\Users\\swara\\.npmrc".
+verbose 0.2023503 Found configuration file "C:\\Users\\swara\\.npmrc".
+verbose 0.2027823 Checking for configuration file "C:\\Users\\.npmrc".
+verbose 0.2068924 Checking for configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\week-16-bp-repo\\.yarnrc".
+verbose 0.2073671 Checking for configuration file "C:\\Users\\swara\\.yarnrc".
+verbose 0.20761 Found configuration file "C:\\Users\\swara\\.yarnrc".
+verbose 0.2081281 Checking for configuration file "C:\\Program Files\\nodejs\\etc\\yarnrc".
+verbose 0.2083297 Checking for configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\week-16-bp-repo\\.yarnrc".
+verbose 0.2085459 Checking for configuration file "C:\\Users\\swara\\Desktop\\harkiratmern\\.yarnrc".
+verbose 0.2088586 Checking for configuration file "C:\\Users\\swara\\Desktop\\.yarnrc".
+verbose 0.209194 Checking for configuration file "C:\\Users\\swara\\.yarnrc".
+verbose 0.209441 Found configuration file "C:\\Users\\swara\\.yarnrc".
+verbose 0.2101516 Checking for configuration file "C:\\Users\\.yarnrc".
+verbose 0.2151425 current time: 2023-10-25T19:12:30.233Z
+$ env-cmd --silent turbo run build --filter=!./examples/**
+• Packages in scope: @coral-xyz/app-extension, @coral-xyz/app-mobile, @coral-xyz/backend-common, @coral-xyz/backend-worker-xnft-wrapper, @coral-xyz/background, @coral-xyz/backpack-web, @coral-xyz/blockchain-common, @coral-xyz/blockchain-evm, @coral-xyz/blockchain-keyring, @coral-xyz/blockchain-solana, @coral-xyz/chat-sdk, @coral-xyz/chat-zeus, @coral-xyz/common, @coral-xyz/db, @coral-xyz/deptool, @coral-xyz/ledger-injection, @coral-xyz/message-sdk, @coral-xyz/provider-core, @coral-xyz/provider-injection, @coral-xyz/react-common, @coral-xyz/recoil, @coral-xyz/tamagui, @coral-xyz/themes, @coral-xyz/wallet-standard, @coral-xyz/xnft-cli, @coral-xyz/zeus, auth, avatars, backend-ws, backpack-api, dropzone-cli, eslint-config-custom, ethereum-rpc-proxy, feature-gates, invites, jupiter-proxy, nft-data, notifications-worker, rpc-proxy, swr-cache, version, xnft-api-server, xnft-gateway
+• Running build in 43 packages
+• Remote caching disabled
+@coral-xyz/common:build: cache miss, executing ee9154e6b50b5f7a
+@coral-xyz/backpack-web:build: cache hit, replaying output c14db93550f15f4f
+@coral-xyz/backpack-web:build: warning package.json: "dependencies" has dependency "eslint-config-next" with range "^13.1.6" that collides with a dependency in "devDependencies" of the same name with version "12.1.6"
+@coral-xyz/backpack-web:build: $ next build
+@coral-xyz/backpack-web:build: info  - Skipping validation of types
+@coral-xyz/backpack-web:build: info  - Linting...
+@coral-xyz/backpack-web:build: info  - Creating an optimized production build...
+@coral-xyz/backpack-web:build: Browserslist: caniuse-lite is outdated. Please run:
+@coral-xyz/backpack-web:build:   npx browserslist@latest --update-db
+@coral-xyz/backpack-web:build:   Why you should do it regularly: https://github.com/browserslist/browserslist#browsers-data-updating
+@coral-xyz/backpack-web:build: Browserslist: caniuse-lite is outdated. Please run:
+@coral-xyz/backpack-web:build:   npx update-browserslist-db@latest
+@coral-xyz/backpack-web:build:   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+@coral-xyz/backpack-web:build: info  - Compiled successfully
+@coral-xyz/backpack-web:build: info  - Collecting page data...
+@coral-xyz/backpack-web:build: info  - Generating static pages (0/6)
+@coral-xyz/backpack-web:build: info  - Generating static pages (1/6)
+@coral-xyz/backpack-web:build: info  - Generating static pages (2/6)
+@coral-xyz/backpack-web:build: info  - Generating static pages (4/6)
+@coral-xyz/backpack-web:build: info  - Generating static pages (6/6)
+@coral-xyz/backpack-web:build: info  - Finalizing page optimization...
+@coral-xyz/backpack-web:build: 
+@coral-xyz/backpack-web:build: Route (pages)                              Size     First Load JS
+@coral-xyz/backpack-web:build: ┌ ○ / (691 ms)                             1.86 kB          91 kB
+@coral-xyz/backpack-web:build: ├   /_app                                  0 B            89.2 kB
+@coral-xyz/backpack-web:build: ├ ○ /404                                   182 B          89.4 kB
+@coral-xyz/backpack-web:build: ├ ○ /about (589 ms)                        2.31 kB        91.5 kB
+@coral-xyz/backpack-web:build: ├ λ /api/email                             0 B            89.2 kB
+@coral-xyz/backpack-web:build: ├ ○ /privacy (634 ms)                      469 B          89.6 kB
+@coral-xyz/backpack-web:build: └ ○ /terms (1317 ms)                       470 B          89.6 kB
+@coral-xyz/backpack-web:build: + First Load JS shared by all              93.9 kB
+@coral-xyz/backpack-web:build:   ├ chunks/framework-af64bd368ed34feb.js   45.2 kB
+@coral-xyz/backpack-web:build:   ├ chunks/main-f56b5fe022344c7e.js        30.5 kB
+@coral-xyz/backpack-web:build:   ├ chunks/pages/_app-4b2eeacb2ace82cc.js  11.8 kB
+@coral-xyz/backpack-web:build:   ├ chunks/webpack-38068ea6cf6544d3.js     1.59 kB
+@coral-xyz/backpack-web:build:   └ css/3f3232e43cf184e2.css               4.74 kB
+@coral-xyz/backpack-web:build: 
+@coral-xyz/backpack-web:build: λ  (Server)  server-side renders at runtime (uses getInitialProps or getServerSideProps)
+@coral-xyz/backpack-web:build: ○  (Static)  automatically rendered as static HTML (uses no initial props)
+@coral-xyz/backpack-web:build: 
+@coral-xyz/backend-worker-xnft-wrapper:build: cache hit, replaying output 26f7bc61d26630f7
+@coral-xyz/backend-worker-xnft-wrapper:build: warning package.json: No license field
+@coral-xyz/backend-worker-xnft-wrapper:build: $ node build.js
+@coral-xyz/themes:build: cache hit, replaying output afad3648506e5edf
+@coral-xyz/themes:build: warning package.json: No license field
+@coral-xyz/themes:build: $ tsc -b
+@coral-xyz/zeus:build: cache hit, replaying output f566e01b75ed82b0
+@coral-xyz/chat-zeus:build: cache hit, replaying output e8dcdc307d8a254a
+@coral-xyz/zeus:build: $ tsc && tsc-alias
+@coral-xyz/chat-zeus:build: $ tsc && tsc-alias
+@coral-xyz/common:build: $ ./scripts/config.sh && tsc -p tsconfig.prod.json && tsc-alias && tsc -p tsconfig.rn.json
+@coral-xyz/common:build: src/constants.ts(1,41): error TS2307: Cannot find module './generated-config' or its corresponding type declarations.
+@coral-xyz/common:build: src/index.ts(8,8): error TS2307: Cannot find module './generated-config' or its corresponding type declarations.
+@coral-xyz/common:build: src/index.ts(37,15): error TS2307: Cannot find module './generated-config' or its corresponding type declarations.
+@coral-xyz/common:build: src/logging.ts(2,22): error TS2307: Cannot find module './generated-config' or its corresponding type declarations.
+@coral-xyz/common:build: error Command failed with exit code 2.
+@coral-xyz/common:build: info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
+
+ Tasks:    5 successful, 6 total
+Cached:    5 cached, 6 total
+  Time:    10.287s 
+
+verbose 11.0013463 Error: Command failed with exit code 2.
+    at ProcessTermError.ExtendableBuiltin (C:\Users\swara\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:721:66)
+    at ProcessTermError.MessageError (C:\Users\swara\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:750:123)
+    at new ProcessTermError (C:\Users\swara\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:790:113)
+    at C:\Users\swara\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:34406:30
+    at Generator.throw (<anonymous>)
+    at step (C:\Users\swara\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:310:30)
+    at C:\Users\swara\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:323:13
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
