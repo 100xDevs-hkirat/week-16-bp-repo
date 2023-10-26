@@ -335,7 +335,7 @@ export const createUser = async (
           firstname: firstname,
           lastname: lastname,
           public_keys: {
-            data: blockchainPublicKeys.map((b) => ({
+            data: blockchainPublicKeys?.map((b) => ({
               blockchain: b.blockchain,
               public_key: b.publicKey,
             })),
@@ -362,7 +362,7 @@ export const createUser = async (
       },
     ],
   });
-
+  console.log(response);
   // @ts-ignore
   return response.insert_auth_users_one;
 };

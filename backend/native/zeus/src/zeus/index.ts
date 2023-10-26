@@ -4344,6 +4344,8 @@ export type ValueTypes = {
       | Variable<any, string>;
     referrer_id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>;
     username?: ValueTypes["citext"] | undefined | null | Variable<any, string>;
+    firstname?: ValueTypes["citext"] | undefined | null | Variable<any, string>;
+    lastname?: ValueTypes["citext"] | undefined | null | Variable<any, string>;
     waitlist_id?: string | undefined | null | Variable<any, string>;
   };
   /** aggregate max on columns */

@@ -10,11 +10,9 @@ export const BaseCreateUser = z.object({
       "should be between 3-15 characters and can only contain numbers, letters, and underscores."
     ),
   firstname: z
-    .string()
-    .nullable(),
+    .string(),
   lastname: z
-    .string()
-    .nullable(),
+    .string(),
   inviteCode: z
     .string()
     .regex(

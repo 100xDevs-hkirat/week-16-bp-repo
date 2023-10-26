@@ -1,6 +1,16 @@
 table:
   name: users
   schema: auth
+configuration:
+  column_config:
+    firstname:
+      custom_name: firstname
+    lastname:
+      custom_name: lastname
+  custom_column_names:
+    firstname: firstname
+    lastname: lastname
+  custom_root_fields: {}
 object_relationships:
   - name: invitation
     using:

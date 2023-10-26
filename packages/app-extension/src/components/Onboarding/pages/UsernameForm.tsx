@@ -16,16 +16,30 @@ export const UsernameForm = ({
   const [username, setUsername] = useState("");
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
-  const [error, setError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [lastnameError, setLastnameError] = useState("");
+  const [firstnameError, setFirstnameError] = useState("");
   const theme = useCustomTheme();
 
   useEffect(() => {
-    setError("");
+    setUsernameError("");
+    setLastnameError("");
+    setFirstnameError("");
   }, [username]);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
+
+      if(firstname === "") {
+        setFirstnameError("Firstname shouldn't be empty!");
+      }
+      if(lastname === "") {
+        setLastnameError("Lastname shouldn't be empty!");
+      }
+      if(lastname === "" || firstname === "") {
+        return;
+      }
       
       try {
         const res = await fetch(`https://auth.xnfts.dev/users/${username}`, {
@@ -38,7 +52,7 @@ export const UsernameForm = ({
         console.log(firstname, lastname);
         onNext(username, firstname, lastname);
       } catch (err: any) {
-        setError(err.message);
+        setUsernameError(err.message);
       }
     },
     [username, firstname, lastname]
@@ -91,8 +105,8 @@ export const UsernameForm = ({
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
-            error={error ? true : false}
-            errorMessage={error}
+            error={usernameError ? true : false}
+            errorMessage={usernameError}
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail
@@ -112,8 +126,8 @@ export const UsernameForm = ({
             inputProps={{
               name: "firstname",
               autoComplete: "off",
-              spellCheck: "false",
-              autoFocus: true,
+              spellCheck: "true",
+              autoFocus: false,
             }}
             placeholder="FirstName"
             type="text"
@@ -123,8 +137,8 @@ export const UsernameForm = ({
                 e.target.value
               );
             }}
-            error={error ? true : false}
-            errorMessage={error}
+            error={firstnameError ? true : false}
+            errorMessage={firstnameError}
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail
@@ -145,7 +159,7 @@ export const UsernameForm = ({
               name: "lastname",
               autoComplete: "off",
               spellCheck: "false",
-              autoFocus: true,
+              autoFocus: false,
             }}
             placeholder="Lastname"
             type="text"
@@ -155,8 +169,8 @@ export const UsernameForm = ({
                 e.target.value
               );
             }}
-            error={error ? true : false}
-            errorMessage={error}
+            error={lastnameError ? true : false}
+            errorMessage={lastnameError}
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail
