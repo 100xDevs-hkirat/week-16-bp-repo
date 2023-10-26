@@ -180,7 +180,7 @@ router.post("/", async (req, res) => {
     }
     return undefined;
   })();
-  console.log("above here");
+
   const user = await createUser(
     username,
     firstname,
@@ -194,7 +194,7 @@ router.post("/", async (req, res) => {
     referrerId
     );
     
-    console.log("below here");
+    
   user?.public_keys.map(async ({ blockchain, id }) => {
     //TODO: make a bulk, single call here
     await updatePublicKey({

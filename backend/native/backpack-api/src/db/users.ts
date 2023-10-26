@@ -362,7 +362,6 @@ export const createUser = async (
       },
     ],
   });
-  console.log(response);
   // @ts-ignore
   return response.insert_auth_users_one;
 };
