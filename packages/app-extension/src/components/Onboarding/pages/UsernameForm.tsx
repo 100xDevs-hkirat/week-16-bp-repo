@@ -1,5 +1,5 @@
 import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { PrimaryButton,TextInput } from "@coral-xyz/react-common";
+import { PrimaryButton, TextInput } from "@coral-xyz/react-common";
 import { useCustomTheme } from "@coral-xyz/themes";
 import { AlternateEmail } from "@mui/icons-material";
 import { Box, InputAdornment } from "@mui/material";
@@ -11,20 +11,36 @@ export const UsernameForm = ({
   onNext,
 }: {
   inviteCode: string;
-  onNext: (username: string) => void;
+  onNext: (username: string, firstname: string, lastname: string) => void;
 }) => {
   const [username, setUsername] = useState("");
-  const [error, setError] = useState("");
+  const [firstname, setFirstname] = useState("");
+  const [lastname, setLastname] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [lastnameError, setLastnameError] = useState("");
+  const [firstnameError, setFirstnameError] = useState("");
   const theme = useCustomTheme();
 
   useEffect(() => {
-    setError("");
+    setUsernameError("");
+    setLastnameError("");
+    setFirstnameError("");
   }, [username]);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
 
+      if(firstname === "") {
+        setFirstnameError("Firstname shouldn't be empty!");
+      }
+      if(lastname === "") {
+        setLastnameError("Lastname shouldn't be empty!");
+      }
+      if(lastname === "" || firstname === "") {
+        return;
+      }
+      
       try {
         const res = await fetch(`https://auth.xnfts.dev/users/${username}`, {
           headers: {
@@ -33,13 +49,13 @@ export const UsernameForm = ({
         });
         const json = await res.json();
         if (!res.ok) throw new Error(json.message || "There was an error");
-
-        onNext(username);
+        console.log(firstname, lastname);
+        onNext(username, firstname, lastname);
       } catch (err: any) {
-        setError(err.message);
+        setUsernameError(err.message);
       }
     },
-    [username]
+    [username, firstname, lastname]
   );
 
   return (
@@ -73,7 +89,7 @@ export const UsernameForm = ({
           marginBottom: "16px",
         }}
       >
-        <Box style={{ marginBottom: "16px" }}>
+        <Box style={{ marginBottom: "2px" }}>
           <TextInput
             inputProps={{
               name: "username",
@@ -89,8 +105,72 @@ export const UsernameForm = ({
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
-            error={error ? true : false}
-            errorMessage={error}
+            error={usernameError ? true : false}
+            errorMessage={usernameError}
+            startAdornment={
+              <InputAdornment position="start">
+                <AlternateEmail
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+        </Box>
+        <Box style={{ marginBottom: "2px" }}>
+          <TextInput
+            inputProps={{
+              name: "firstname",
+              autoComplete: "off",
+              spellCheck: "true",
+              autoFocus: false,
+            }}
+            placeholder="FirstName"
+            type="text"
+            value={firstname}
+            setValue={(e) => {
+              setFirstname(
+                e.target.value
+              );
+            }}
+            error={firstnameError ? true : false}
+            errorMessage={firstnameError}
+            startAdornment={
+              <InputAdornment position="start">
+                <AlternateEmail
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+        </Box>
+        <Box style={{ marginBottom: "2px" }}>
+          <TextInput
+            inputProps={{
+              name: "lastname",
+              autoComplete: "off",
+              spellCheck: "false",
+              autoFocus: false,
+            }}
+            placeholder="Lastname"
+            type="text"
+            value={lastname}
+            setValue={(e) => {
+              setLastname(
+                e.target.value
+              );
+            }}
+            error={lastnameError ? true : false}
+            errorMessage={lastnameError}
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail

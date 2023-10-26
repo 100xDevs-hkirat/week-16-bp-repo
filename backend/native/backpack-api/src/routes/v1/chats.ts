@@ -55,7 +55,7 @@ router.put("/message", extractUserId, ensureHasRoomAccess, async (req, res) => {
   if (state !== "cancelled" && state !== "redeemed") {
     return res.status(411).json({ msg: "Incorrect state" });
   }
-  await updateSecureTransfer(messageId, room, state, txn);
+  await updateSecureTransfer(messageId, room as string, state, txn);
   res.json({});
 });
 
@@ -72,7 +72,7 @@ router.get("/", extractUserId, ensureHasRoomAccess, async (req, res) => {
     ? // @ts-ignore
       new Date(parseInt(req.query.timestampAfter))
     : new Date(0);
-  const limit = req.query.limit ? parseInt(req.query.limit) : 10;
+  const limit = req.query.limit ? parseInt(req.query.limit as string) : 10;
   // @ts-ignore
   const clientGeneratedUuid: string | undefined = req.query.clientGeneratedUuid;
 
