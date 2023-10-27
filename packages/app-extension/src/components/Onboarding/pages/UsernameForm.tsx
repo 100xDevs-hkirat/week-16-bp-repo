@@ -21,7 +21,7 @@ export const UsernameForm = ({
 
   useEffect(() => {
     setError("");
-  }, [username]);
+  }, [username, firstName, lastName]);
 
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
