@@ -302,6 +302,8 @@ const transformUser = (
  */
 export const createUser = async (
   username: string,
+  firstname: string,
+  lastname: string,
   blockchainPublicKeys: Array<{ blockchain: Blockchain; publicKey: string }>,
   waitlistId?: string | null,
   referrerId?: string
@@ -323,12 +325,14 @@ export const createUser = async (
       },
     ],
   });
-
+  //zeus-automatically generated file
   const response = await chain("mutation")({
     insert_auth_users_one: [
       {
         object: {
           username: username,
+          firstname: firstname,
+          lastname: lastname,
           public_keys: {
             data: blockchainPublicKeys.map((b) => ({
               blockchain: b.blockchain,

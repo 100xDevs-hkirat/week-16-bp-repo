@@ -13,6 +13,7 @@
     "@coral-xyz/zeus": "*",
     "@metaplex-foundation/js": "0.16.1",
     "@metaplex-foundation/mpl-token-metadata": "^2.8.1",
+    "@noble/secp256k1": "^2.0.0",
     "@saberhq/anchor-contrib": "^1.14.11",
     "@saberhq/merkle-distributor": "^0.3.5",
     "@saberhq/solana-contrib": "^1.14.11",
