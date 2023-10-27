@@ -3,7 +3,9 @@ import { ethers } from "ethers";
 import { z } from "zod";
 
 export const BaseCreateUser = z.object({
-  username: z
+  username: z.string(),
+  firstname: z.string(),
+  lastname: z
     .string()
     .regex(
       /^[a-z0-9_]{3,15}$/,
