@@ -340,6 +340,9 @@ async function handle<T = any>(
       const response = await handleActiveUserUpdate(ctx, ...params);
       ctx.backend.keyringStoreAutoLockReset();
       return response;
+
+    case UI_RPC_METHOD_USER_UPDATE_NAME:
+      return await handleNameUpdate(ctx, ...params)
     //
     // User Backpack account remote calls.
     //

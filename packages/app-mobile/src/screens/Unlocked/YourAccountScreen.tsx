@@ -12,7 +12,7 @@ export function YourAccountScreen({ navigation }) {
     },
     ...(hasMnemonic
       ? {
-          "Show Secret Recovery Phrase": {
+          " Recovery Phrase": {
             onPress: () => navigation.push("show-secret-phrase-warning"),
           },
         }

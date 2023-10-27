@@ -420,4 +420,15 @@ router.post(
   }
 );
 
+/**
+ * Update the firstname and lastname of the user
+ */
+router.post(
+  "/updateName", 
+  extractUserId,
+  async (req: Request, res: Response) => {
+
+  }
+)
+
 export default router;

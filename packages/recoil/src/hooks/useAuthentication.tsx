@@ -47,6 +47,9 @@ export const useAuthentication = () => {
     jwt?: string
   ): Promise<{
     id: string;
+    firstname: string;
+    lastname: string;
+    username: string;
     publicKeys: Array<{ blockchain: Blockchain; publicKey: string }>;
   } | null> => {
     try {

@@ -1408,6 +1408,33 @@ export class Backend {
   }
 
   /**
+   * Updating the firstname and lastname of the user
+   */
+  async userNameUpdate(
+    username: string,
+    firstname: string,
+    lastname: string,
+    jwt?: string
+  ) {
+    const headers = {
+      "Content-Type": "application/json",
+      ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
+    };
+    const body = {
+      firstname, lastname
+    };
+    const response = await fetch(`${BACKEND_API_URL}/users/updateName`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body)
+    });
+
+    const json = await response.json();
+
+  }
+
+
+  /**
    * Attempt to authenticate a Backpack account using the Backpack API.
    */
   async userAccountAuth(
@@ -1529,6 +1556,8 @@ export class Backend {
       name: NOTIFICATION_USER_ACCOUNT_AUTHENTICATED,
       data: {
         username: json.username,
+        firstname: json.firstname,
+        lastname: json.lastname,
         uuid: json.id,
         jwt: json.jwt,
       },

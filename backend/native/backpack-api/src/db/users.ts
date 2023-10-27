@@ -55,6 +55,8 @@ export const getUsers = async (
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
       },
     ],
     auth_public_keys: [
@@ -113,6 +115,8 @@ export const getUsers = async (
     (userResponse) => ({
       id: userResponse.id,
       username: userResponse.username,
+      firstname: userResponse.firstname,
+      lastname: userResponse.lastname,
       public_keys:
         userToPublicKeyMapping[userResponse.id as string].map((x) => ({
           blockchain: x.blockchain,
@@ -212,6 +216,8 @@ export const getUser = async (id: string, onlyActiveKeys?: boolean) => {
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
@@ -251,6 +257,8 @@ const transformUsers = (
   users: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -268,6 +276,8 @@ const transformUser = (
   user: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -279,6 +289,8 @@ const transformUser = (
   return {
     id: user.id,
     username: user.username,
+    firstname: user.firstname,
+    lastname: user.lastname,
     // Camelcase public keys for response
     publicKeys: user.public_keys
       .map((k) => ({
