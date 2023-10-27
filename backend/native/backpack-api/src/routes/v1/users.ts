@@ -26,11 +26,13 @@ import {
   getUser,
   getUserByPublicKeyAndChain,
   getUserByUsername,
+  getUserMetadata,
   getUsers,
   getUsersByPrefix,
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserMetadata,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -120,14 +122,29 @@ router.get("/jwt/xnft", extractUserId, async (req, res) => {
   return res.json({ jwt: signedJwt });
 });
 
+router.get("/metadata", extractUserId, async (req, res) => {
+  const userId: string = req.id!;
+  const metadata = await getUserMetadata(userId);
+  res.json({
+    firstName: metadata.firstName,
+    lastName: metadata.lastName,
+  });
+});
+
+router.put("/metadata", extractUserId, async (req, res) => {
+  const userId: string = req.id!;
+  const firstName: string = req.body.firstName;
+  const lastName: string = req.body.lastName;
+  await updateUserMetadata(userId, firstName, lastName);
+  res.json({});
+});
+
 /**
  * Create a new user.
  */
 router.post("/", async (req, res) => {
   const { username, waitlistId, blockchainPublicKeys, firstName, lastName } =
     CreateUserWithPublicKeys.parse(req.body);
-  console.log(firstName);
-  console.log(lastName);
 
   // Validate all the signatures
   for (const blockchainPublicKey of blockchainPublicKeys) {

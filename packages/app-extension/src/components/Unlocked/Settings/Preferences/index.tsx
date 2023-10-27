@@ -90,6 +90,9 @@ export function Preferences() {
     "Trusted Sites": {
       onClick: () => nav.push("preferences-trusted-sites"),
     },
+    "Update Profile": {
+      onClick: () => nav.push("preferences-update-user"),
+    },
   };
 
   if (BACKPACK_FEATURE_LIGHT_MODE) {
