@@ -55,6 +55,8 @@ export const getUsers = async (
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
       },
     ],
     auth_public_keys: [
@@ -113,6 +115,8 @@ export const getUsers = async (
     (userResponse) => ({
       id: userResponse.id,
       username: userResponse.username,
+      firstname: userResponse.firstname,
+      lastname: userResponse.lastname,
       public_keys:
         userToPublicKeyMapping[userResponse.id as string].map((x) => ({
           blockchain: x.blockchain,
@@ -212,6 +216,8 @@ export const getUser = async (id: string, onlyActiveKeys?: boolean) => {
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
@@ -251,6 +257,8 @@ const transformUsers = (
   users: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -268,6 +276,8 @@ const transformUser = (
   user: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -279,6 +289,8 @@ const transformUser = (
   return {
     id: user.id,
     username: user.username,
+    firstname: user.firstname,
+    lastname: user.lastname,
     // Camelcase public keys for response
     publicKeys: user.public_keys
       .map((k) => ({
@@ -302,12 +314,16 @@ const transformUser = (
  */
 export const createUser = async (
   username: string,
+  firstname: string,
+  lastname: string,
   blockchainPublicKeys: Array<{ blockchain: Blockchain; publicKey: string }>,
   waitlistId?: string | null,
   referrerId?: string
 ): Promise<{
   id: string;
   username: string;
+  firstname: string;
+  lastname: string;
   public_keys: { blockchain: "solana" | "ethereum"; id: number }[];
 }> => {
   const inviteCode = uuidv4();
@@ -323,14 +339,15 @@ export const createUser = async (
       },
     ],
   });
-
   const response = await chain("mutation")({
     insert_auth_users_one: [
       {
         object: {
           username: username,
+          firstname: firstname,
+          lastname: lastname,
           public_keys: {
-            data: blockchainPublicKeys.map((b) => ({
+            data: blockchainPublicKeys?.map((b) => ({
               blockchain: b.blockchain,
               public_key: b.publicKey,
             })),
@@ -343,6 +360,8 @@ export const createUser = async (
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
@@ -355,7 +374,6 @@ export const createUser = async (
       },
     ],
   });
-
   // @ts-ignore
   return response.insert_auth_users_one;
 };
@@ -491,6 +509,48 @@ export async function updateUserAvatar({
   return response.update_auth_users;
 }
 
+/**
+ * Update User firstname and lastname
+ */
+export const updateUserName = async ({
+  firstname,
+  lastname,
+  userId
+}: {
+  firstname: string,
+  lastname: string,
+  userId: string
+}): Promise<
+    {
+      id: string;
+      firstname: string;
+      lastname: string;
+    }
+> => {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+        _set: {
+          firstname: firstname,
+          lastname: lastname
+        },
+      },
+      {
+        returning: {
+          firstname: true,
+          id: true,
+          lastname: true
+        }
+      },
+    ],
+  });
+
+
+  return response.update_auth_users;
+}
 export const getUserByPublicKeyAndChain = async (
   publicKey: string,
   blockchain: Blockchain

@@ -211,6 +211,8 @@ export const UI_RPC_METHOD_USERNAME_ACCOUNT_CREATE =
   "ui-rpc-method-username-account-create";
 export const UI_RPC_METHOD_ACTIVE_USER_UPDATE =
   "ui-rpc-method-active-user-update";
+export const UI_RPC_METHOD_USER_UPDATE_NAME = 
+  "ui-rpc-method-user-update-name";
 export const UI_RPC_METHOD_USER_JWT_UPDATE = "ui-rpc-method-user-jwt-update";
 export const UI_RPC_METHOD_PREFERENCES_READ = "ui-rpc-method-references-read";
 // User account methods that interact with the API
@@ -363,6 +365,8 @@ export const NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED =
   "notification-user-account-public-key-created";
 export const NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_DELETED =
   "notification-user-account-public-key-deleted";
+export const NOTIFICATION_USER_NAME_UPDATE = 
+  "notification-user-name-update";
 
 //
 // Ethereum web injected provider API.
@@ -579,7 +583,7 @@ export const ALCHEMY_ETHEREUM_MAINNET_API_KEY =
   "DlJr6QuBC2EaE-L60-iqQQGq9hi9-XSZ";
 
 export const AVATAR_BASE_URL = "https://swr.xnfts.dev/avatars";
-export const BACKEND_API_URL = "https://backpack-api.xnfts.dev";
+export const BACKEND_API_URL = "http://localhost:8080";
 export const REALTIME_API_URL = "https://backend-ws.xnfts.dev";
 export const MESSAGING_COMMUNICATION_PUSH = "MESSAGING_COMMUNICATION_PUSH";
 export const MESSAGING_COMMUNICATION_FETCH = "MESSAGING_COMMUNICATION_FETCH";

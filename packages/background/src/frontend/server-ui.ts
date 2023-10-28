@@ -106,6 +106,7 @@ import {
   UI_RPC_METHOD_USER_ACCOUNT_READ,
   UI_RPC_METHOD_USER_JWT_UPDATE,
   UI_RPC_METHOD_USER_READ,
+  UI_RPC_METHOD_USER_UPDATE_NAME,
   UI_RPC_METHOD_USERNAME_ACCOUNT_CREATE,
   withContextPort,
 } from "@coral-xyz/common";
@@ -340,6 +341,11 @@ async function handle<T = any>(
       const response = await handleActiveUserUpdate(ctx, ...params);
       ctx.backend.keyringStoreAutoLockReset();
       return response;
+
+    case UI_RPC_METHOD_USER_UPDATE_NAME:
+      //@ts-ignore
+      return await handlerUserUpdateName(ctx, ...params);
+    
     //
     // User Backpack account remote calls.
     //
@@ -622,6 +628,18 @@ async function handleActiveUserUpdate(
 ): Promise<RpcResponse<string>> {
   const resp = await ctx.backend.activeUserUpdate(...args);
   return [resp];
+}
+
+async function handlerUserUpdateName(
+  ctx: Context<Backend>,
+  ...args: Parameters<Backend["userNameUpdate"]>
+): Promise<RpcResponse<string>> {
+  try {
+    const resp = await ctx.backend.userNameUpdate(...args);
+    return [resp];
+  } catch (error: any) {
+    return [undefined, String(error)];
+  }
 }
 
 async function handleUserAccountAuth(

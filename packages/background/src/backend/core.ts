@@ -61,6 +61,7 @@ import {
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_DELETED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEYS_UPDATED,
+  NOTIFICATION_USER_NAME_UPDATE,
   NOTIFICATION_XNFT_PREFERENCE_UPDATED,
   SolanaCluster,
   SolanaExplorer,
@@ -1408,6 +1409,45 @@ export class Backend {
   }
 
   /**
+   * Updating the firstname and lastname of the user
+   */
+  async userNameUpdate(
+    firstname: string,
+    lastname: string,
+    jwt?: string
+  ) {
+    const headers = {
+      "Content-Type": "application/json",
+      ...(jwt ? { Authorization: `Bearer ${jwt}` } : {}),
+    };
+    const body = {
+      firstname, lastname
+    };
+    const response = await fetch(`${BACKEND_API_URL}/users/updateName`, {
+      method: "POST",
+      headers,
+      body: JSON.stringify(body)
+    });
+
+    const json = await response.json();
+
+    /**
+     * Emit a event
+     */
+    this.events.emit(BACKEND_EVENT, {
+      name: NOTIFICATION_USER_NAME_UPDATE,
+      data: {
+        firstname: firstname,
+        lastname: lastname,
+        jwt: jwt
+      },
+    });
+    return json;
+
+  }
+
+
+  /**
    * Attempt to authenticate a Backpack account using the Backpack API.
    */
   async userAccountAuth(
@@ -1529,6 +1569,8 @@ export class Backend {
       name: NOTIFICATION_USER_ACCOUNT_AUTHENTICATED,
       data: {
         username: json.username,
+        firstname: json.firstname,
+        lastname: json.lastname,
         uuid: json.id,
         jwt: json.jwt,
       },

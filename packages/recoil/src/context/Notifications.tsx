@@ -47,6 +47,7 @@ import {
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_DELETED,
   NOTIFICATION_USER_ACCOUNT_PUBLIC_KEYS_UPDATED,
+  NOTIFICATION_USER_NAME_UPDATE,
   NOTIFICATION_XNFT_PREFERENCE_UPDATED,
 } from "@coral-xyz/common";
 import type { Commitment } from "@solana/web3.js";
@@ -333,6 +334,9 @@ export function NotificationsProvider(props: any) {
           break;
         case NOTIFICATION_USER_ACCOUNT_AUTHENTICATED:
           handleUserAccountAuthenticated(notif);
+          break;
+        case NOTIFICATION_USER_NAME_UPDATE:
+          handleUserNameUpdate(notif);
           break;
         case NOTIFICATION_USER_ACCOUNT_PUBLIC_KEY_CREATED:
           handleUserAccountPublicKeyCreated(notif);
@@ -650,6 +654,10 @@ export function NotificationsProvider(props: any) {
     const handleUserAccountPublicKeysUpdated = (notif: Notification) => {
       setServerPublicKeys(notif.data.publicKeys);
     };
+
+    const handleUserNameUpdate = (notif: Notification) => {
+      console.log(notif);
+    }
 
     const handleEthereumActiveWalletUpdated = (notif: Notification) => {
       allPlugins().forEach((p) => {

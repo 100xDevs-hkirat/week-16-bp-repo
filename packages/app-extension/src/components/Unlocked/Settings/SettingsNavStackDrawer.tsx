@@ -46,6 +46,7 @@ import { Preferences } from "./Preferences";
 import { XnftSettings } from "./Xnfts";
 import { YourAccount } from "./YourAccount";
 import { SettingsMenu } from ".";
+import { ChangeName } from "./YourAccount/ChangeName";
 
 export function SettingsNavStackDrawer({
   settingsOpen,
@@ -151,6 +152,10 @@ export function SettingsNavStackDrawer({
           <NavStackScreen
             name="change-password"
             component={(props: any) => <ChangePassword {...props} />}
+          />
+          <NavStackScreen
+            name="change-name"
+            component={(props: any) => <ChangeName {...props} />}
           />
           <NavStackScreen
             name="reset"
