@@ -31,6 +31,7 @@ import {
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserName,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -427,7 +428,14 @@ router.post(
   "/updateName", 
   extractUserId,
   async (req: Request, res: Response) => {
+    const response = await updateUserName({
+      userId: req.id!,
+      firstname: req.body.firstname,
+      lastname: req.body.lastname
+    });
 
+    return res.status(201).json(response).end();
+    
   }
 )
 

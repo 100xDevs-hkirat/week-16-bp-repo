@@ -1,19 +1,14 @@
 import { useEffect, useState } from "react";
 import {
-  UI_RPC_METHOD_KEYRING_STORE_CHECK_PASSWORD,
-  UI_RPC_METHOD_PASSWORD_UPDATE,
+  UI_RPC_METHOD_USER_UPDATE_NAME,
 } from "@coral-xyz/common";
 import { InputListItem, Inputs, PrimaryButton } from "@coral-xyz/react-common";
 import { useAuthentication, useBackgroundClient, useUser } from "@coral-xyz/recoil";
-import { useCustomTheme } from "@coral-xyz/themes";
-import { Button, Typography } from "@mui/material";
 
-import { SubtextParagraph } from "../../../common";
 import { useDrawerContext } from "../../../common/Layout/Drawer";
 import { useNavigation } from "../../../common/Layout/NavStack";
 
 export function ChangeName() {
-  const theme = useCustomTheme();
   const { close } = useDrawerContext();
   const nav = useNavigation();
   const { checkAuthentication } = useAuthentication();
@@ -22,13 +17,10 @@ export function ChangeName() {
   const [lastname, setLastname] = useState("");
 
   const background = useBackgroundClient();
-  const [currentPassword, setCurrentPassword] = useState("");
   const [newfirstname, setNewfirstname] = useState("");
   const [newlastname, setNewlastname] = useState("");
-  const [newPw2, setNewPw2] = useState("");
 
-  const [currentPasswordError, setCurrentPasswordError] = useState(false);
-  const [passwordMismatchError, setPasswordMismatchError] = useState(false);
+  const [nameError, setNameError] = useState(false);
   const missingNewName = newfirstname.trim() === "" && newlastname.trim() === "";
 
   useEffect(() => {
@@ -36,7 +28,7 @@ export function ChangeName() {
     nav.setOptions({ headerTitle: "Change name" });
     (async () => {
       const result = user.jwt ? await checkAuthentication(user.jwt) : null;
-      if(result) {
+      if (result) {
         setFirstname(result.firstname)
         setLastname(result.lastname);
       }
@@ -51,12 +43,34 @@ export function ChangeName() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          
+          (async () => {
+
+            const fn = newfirstname.length > 0 ? newfirstname : firstname;
+            const ln = newlastname.length > 0 ? newlastname : lastname;
+
+            try {
+              const response = await background.request({
+                method: UI_RPC_METHOD_USER_UPDATE_NAME,
+                params: [fn, ln, user.jwt],
+              });
+  
+              if (response) {
+                setFirstname(fn);
+                setLastname(ln);
+              }
+              close();
+            } catch (error: any) {
+              console.log(error);
+              if(error) {
+                setNameError(true);
+              }
+            }
+          })();
         }}
         style={{ display: "flex", height: "100%", flexDirection: "column" }}
       >
         <div style={{ flex: 1, flexGrow: 1 }}>
-          <Inputs error={currentPasswordError}>
+          <Inputs error={nameError}>
             <InputListItem
               isFirst
               isLast

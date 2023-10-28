@@ -100,7 +100,7 @@ export const approvedOrigins = selector<Array<string>>({
 });
 
 // This is the *active* username.
-export const user = atom<{ username: string; uuid: string; jwt: string }>({
+export const user = atom<{ username: string; firstname: string, lastname: string, uuid: string; jwt: string }>({
   key: "user",
   default: selector({
     key: "userDefault",

@@ -509,6 +509,48 @@ export async function updateUserAvatar({
   return response.update_auth_users;
 }
 
+/**
+ * Update User firstname and lastname
+ */
+export const updateUserName = async ({
+  firstname,
+  lastname,
+  userId
+}: {
+  firstname: string,
+  lastname: string,
+  userId: string
+}): Promise<
+    {
+      id: string;
+      firstname: string;
+      lastname: string;
+    }
+> => {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+        _set: {
+          firstname: firstname,
+          lastname: lastname
+        },
+      },
+      {
+        returning: {
+          firstname: true,
+          id: true,
+          lastname: true
+        }
+      },
+    ],
+  });
+
+
+  return response.update_auth_users;
+}
 export const getUserByPublicKeyAndChain = async (
   publicKey: string,
   blockchain: Blockchain
