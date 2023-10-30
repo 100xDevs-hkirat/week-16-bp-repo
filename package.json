@@ -77,6 +77,6 @@
     "yarn": "^1.22.17"
   },
   "dependencies": {
-    "patch-package": "^6.5.0"
+    "patch-package": "^8.0.0"
   }
 }
