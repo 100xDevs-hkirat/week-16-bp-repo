@@ -6,6 +6,7 @@ export * from "./ethereum";
 export * from "./feature-gates";
 export * from "./friendship";
 export * from "./keyring";
+export * from "./metadata";
 export * from "./nft";
 export * from "./notifications";
 export * from "./preferences";

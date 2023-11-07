@@ -26,11 +26,13 @@ import {
   getUser,
   getUserByPublicKeyAndChain,
   getUserByUsername,
+  getUserMetadata,
   getUsers,
   getUsersByPrefix,
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserMetadata,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -110,6 +112,26 @@ router.get("/", extractUserId, async (req, res) => {
   });
 });
 
+router.get("/metadata", extractUserId, async (req, res) => {
+  const userId: string = req.id!;
+  const metadata = await getUserMetadata(userId);
+  res.json({
+    firstname: metadata.firstname,
+    lastname: metadata.lastname,
+  });
+});
+
+router.put("/metadata", extractUserId, async (req, res) => {
+  const userId: string = req.id!;
+  const firstname = req.body.firstname;
+  const lastname = req.body.lastname;
+  const metadata = await updateUserMetadata(userId, firstname, lastname);
+  res.json({
+    firstname: metadata?.returning[0].firstname,
+    lastname: metadata?.returning[0].lastname,
+  });
+});
+
 router.get("/jwt/xnft", extractUserId, async (req, res) => {
   // @ts-ignore
   const uuid = req.id as string;
@@ -124,9 +146,10 @@ router.get("/jwt/xnft", extractUserId, async (req, res) => {
  * Create a new user.
  */
 router.post("/", async (req, res) => {
-  const { username, waitlistId, blockchainPublicKeys } =
+  const { username, firstname, lastname, waitlistId, blockchainPublicKeys } =
     CreateUserWithPublicKeys.parse(req.body);
 
+  console.log(firstname, lastname);
   // Validate all the signatures
   for (const blockchainPublicKey of blockchainPublicKeys) {
     const signedMessage = getCreateMessage(blockchainPublicKey.publicKey);
@@ -182,6 +205,8 @@ router.post("/", async (req, res) => {
 
   const user = await createUser(
     username,
+    firstname,
+    lastname,
     blockchainPublicKeys.map((b) => ({
       ...b,
       // Cast blockchain to correct type

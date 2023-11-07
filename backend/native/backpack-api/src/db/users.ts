@@ -13,6 +13,26 @@ const chain = Chain(HASURA_URL, {
   },
 });
 
+export const getUserMetadata = async (
+  userId: string
+): Promise<{ firstname: string; lastname: string }> => {
+  const response = await chain("query")({
+    auth_users: [
+      {
+        where: { id: { _eq: userId } },
+      },
+      {
+        firstname: true,
+        lastname: true,
+      },
+    ],
+  });
+  return {
+    firstname: response.auth_users[0].firstname!,
+    lastname: response.auth_users[0].lastname!,
+  };
+};
+
 export const getUsersMetadata = async (
   userIds: string[]
 ): Promise<
@@ -302,6 +322,8 @@ const transformUser = (
  */
 export const createUser = async (
   username: string,
+  firstname: string,
+  lastname: string,
   blockchainPublicKeys: Array<{ blockchain: Blockchain; publicKey: string }>,
   waitlistId?: string | null,
   referrerId?: string
@@ -329,6 +351,8 @@ export const createUser = async (
       {
         object: {
           username: username,
+          firstname: firstname,
+          lastname: lastname,
           public_keys: {
             data: blockchainPublicKeys.map((b) => ({
               blockchain: b.blockchain,
@@ -461,6 +485,34 @@ export async function createUserPublicKey({
 
   return response.insert_auth_public_keys_one;
 }
+
+export const updateUserMetadata = async (
+  userId: string,
+  firstname: string,
+  lastname: string
+) => {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+        _set: {
+          firstname,
+          lastname,
+        },
+      },
+      {
+        returning: {
+          firstname: true,
+          lastname: true,
+        },
+      },
+    ],
+  });
+
+  return response.update_auth_users;
+};
 
 /**
  * Update avatar_nft of a user.
