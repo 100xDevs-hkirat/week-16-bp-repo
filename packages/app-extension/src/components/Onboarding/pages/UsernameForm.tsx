@@ -17,16 +17,28 @@ export const UsernameForm = ({
   const [firstname, setFirstname] = useState("");
   const [lastname, setLastname] = useState("");
   const [error, setError] = useState("");
+  const [usernameError, setUsernameError] = useState("");
+  const [firstnameError, setFirstnameError] = useState("");
+  const [lastnameError, setLastnameError] = useState("");
   const theme = useCustomTheme();
 
   useEffect(() => {
     setError("");
   }, [username]);
 
+  useEffect(() => {
+    setFirstnameError("");
+  }, [firstname]);
+  useEffect(() => {
+    setLastnameError("");
+  }, [lastname]);
+  useEffect(() => {
+    setUsernameError("");
+  }, [username]);
+
   const handleSubmit = useCallback(
     async (e: FormEvent) => {
       e.preventDefault();
-
       try {
         const res = await fetch(`https://auth.xnfts.dev/users/${username}`, {
           headers: {
@@ -38,7 +50,7 @@ export const UsernameForm = ({
 
         onNext(username, firstname, lastname);
       } catch (err: any) {
-        setError(err.message);
+        setUsernameError(err.message);
       }
     },
     [username, firstname, lastname]
@@ -91,8 +103,8 @@ export const UsernameForm = ({
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
-            error={error ? true : false}
-            errorMessage={error}
+            error={usernameError ? true : false}
+            errorMessage={usernameError}
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail
@@ -123,8 +135,8 @@ export const UsernameForm = ({
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
-            error={error ? true : false}
-            errorMessage={error}
+            error={firstnameError ? true : false}
+            errorMessage={firstnameError}
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail
@@ -155,8 +167,8 @@ export const UsernameForm = ({
                 e.target.value.toLowerCase().replace(/[^a-z0-9_]/g, "")
               );
             }}
-            error={error ? true : false}
-            errorMessage={error}
+            error={lastnameError ? true : false}
+            errorMessage={lastnameError}
             startAdornment={
               <InputAdornment position="start">
                 <AlternateEmail
