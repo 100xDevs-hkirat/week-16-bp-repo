@@ -212,6 +212,8 @@ export const getUser = async (id: string, onlyActiveKeys?: boolean) => {
       {
         id: true,
         username: true,
+        firstname: true,
+        lastname: true,
         public_keys: [
           {},
           {
@@ -229,6 +231,14 @@ export const getUser = async (id: string, onlyActiveKeys?: boolean) => {
   }
   return transformUser(response.auth_users_by_pk, onlyActiveKeys);
 };
+/**
+ * update user
+ */
+// export const updateUser = async (userId: string) => {
+//   const res = chain("mutation",{
+//    update_auth_users_one: []
+//   })
+// }
 
 export const getReferrer = async (userId: string) => {
   const { auth_users_by_pk } = await chain("query")({
@@ -268,6 +278,8 @@ const transformUser = (
   user: {
     id: unknown;
     username: unknown;
+    firstname: unknown;
+    lastname: unknown;
     public_keys: Array<{
       blockchain: string;
       public_key: string;
@@ -279,6 +291,8 @@ const transformUser = (
   return {
     id: user.id,
     username: user.username,
+    firstname: user.firstname,
+    lastname: user.lastname,
     // Camelcase public keys for response
     publicKeys: user.public_keys
       .map((k) => ({

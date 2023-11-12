@@ -236,6 +236,16 @@ router.post("/", async (req, res) => {
 });
 
 /**
+ * Update user
+ */
+// router.post("/me", extractUserId, async (req: Request, res: Response ) => {
+//   if(req.id){
+//     try {
+
+//     }
+//   }
+// })
+/**
  * Fetches User detail by id
  */
 router.get("/userById", extractUserId, async (req: Request, res: Response) => {
