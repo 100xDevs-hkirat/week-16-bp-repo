@@ -763,8 +763,10 @@ export const AllTypesProps: Record<string, any> = {
     _or: "auth_users_bool_exp",
     created_at: "timestamptz_comparison_exp",
     dropzone_public_key: "auth_public_keys_bool_exp",
+    firstname: "String_comparison_exp",
     id: "uuid_comparison_exp",
     invitation: "auth_invitations_bool_exp",
+    lastname: "String_comparison_exp",
     public_keys: "auth_public_keys_bool_exp",
     public_keys_aggregate: "auth_public_keys_aggregate_bool_exp",
     referred_users: "auth_users_bool_exp",
@@ -784,12 +786,16 @@ export const AllTypesProps: Record<string, any> = {
   },
   auth_users_max_order_by: {
     created_at: "order_by",
+    firstname: "order_by",
     id: "order_by",
+    lastname: "order_by",
     username: "order_by",
   },
   auth_users_min_order_by: {
     created_at: "order_by",
+    firstname: "order_by",
     id: "order_by",
+    lastname: "order_by",
     username: "order_by",
   },
   auth_users_obj_rel_insert_input: {
@@ -804,8 +810,10 @@ export const AllTypesProps: Record<string, any> = {
   auth_users_order_by: {
     created_at: "order_by",
     dropzone_public_key_aggregate: "auth_public_keys_aggregate_order_by",
+    firstname: "order_by",
     id: "order_by",
     invitation: "auth_invitations_order_by",
+    lastname: "order_by",
     public_keys_aggregate: "auth_public_keys_aggregate_order_by",
     referred_users_aggregate: "auth_users_aggregate_order_by",
     referrer: "auth_users_order_by",
@@ -2084,8 +2092,10 @@ export const ReturnTypes: Record<string, any> = {
   auth_users: {
     created_at: "timestamptz",
     dropzone_public_key: "auth_public_keys",
+    firstname: "String",
     id: "uuid",
     invitation: "auth_invitations",
+    lastname: "String",
     public_keys: "auth_public_keys",
     public_keys_aggregate: "auth_public_keys_aggregate",
     referred_users: "auth_users",
@@ -2104,12 +2114,16 @@ export const ReturnTypes: Record<string, any> = {
   },
   auth_users_max_fields: {
     created_at: "timestamptz",
+    firstname: "String",
     id: "uuid",
+    lastname: "String",
     username: "citext",
   },
   auth_users_min_fields: {
     created_at: "timestamptz",
+    firstname: "String",
     id: "uuid",
+    lastname: "String",
     username: "citext",
   },
   auth_users_mutation_response: {
