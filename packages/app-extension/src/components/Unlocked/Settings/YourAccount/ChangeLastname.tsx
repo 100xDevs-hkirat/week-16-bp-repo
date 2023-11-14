@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
-import { BACKEND_API_URL ,
+import {
+  BACKEND_API_URL,
   UI_RPC_METHOD_KEYRING_STORE_CHECK_PASSWORD,
   UI_RPC_METHOD_PASSWORD_UPDATE,
 } from "@coral-xyz/common";
@@ -7,6 +8,7 @@ import { InputListItem, Inputs, PrimaryButton } from "@coral-xyz/react-common";
 import { useBackgroundClient } from "@coral-xyz/recoil";
 import { useCustomTheme } from "@coral-xyz/themes";
 import { Button, Typography } from "@mui/material";
+import { resolve } from "dns";
 
 import { SubtextParagraph } from "../../../common";
 import { useDrawerContext } from "../../../common/Layout/Drawer";
@@ -20,9 +22,7 @@ export const ChangeLastname = () => {
     const json = await response.json();
 
     if (!response.ok) throw new Error(json.message || "There was an error");
-    setLastname(() => {
-      return json.lastname;
-    });
+    setLastname(json.lastname);
     console.log(JSON.stringify(json));
     console.log("firstname", json.firstname);
     console.log("lastname", json.lastname);
@@ -38,44 +38,34 @@ export const ChangeLastname = () => {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          // (async () => {
-          //     const res = await fetch();
-          // })
-          // (async () => {
-          //     const isCurrentCorrect = await background.request({
-          //         method: UI_RPC_METHOD_KEYRING_STORE_CHECK_PASSWORD,
-          //         params: [currentPassword],
-          //     });
-          //     const mismatchError = newPw1.trim() === "" || newPw1 !== newPw2;
-
-          //     setCurrentPasswordError(!isCurrentCorrect);
-          //     setPasswordMismatchError(mismatchError);
-
-          //     if (!isCurrentCorrect || mismatchError) {
-          //         return;
-          //     }
-
-          //     await background.request({
-          //         method: UI_RPC_METHOD_PASSWORD_UPDATE,
-          //         params: [currentPassword, newPw1],
-          //     });
-
-          //     close();
-          // })();
+          console.log("new lastname", lastname);
+          (async () => {
+            const response = await fetch(`${BACKEND_API_URL}/users/profile`, {
+              method: "POST",
+              body: JSON.stringify({
+                lastname,
+              }),
+              headers: {
+                "Content-type": "application/json",
+              },
+            });
+            if (!response.ok) {
+              throw new Error("failed to update");
+            }
+            const res = await response.json();
+            console.log(res);
+          })();
         }}
         style={{ display: "flex", height: "100%", flexDirection: "column" }}
       >
         <div style={{ flex: 1, flexGrow: 1 }}>
-          {/* <Inputs  */}
-          {/* // error={passwordMismatchError} */}
-          {/* // > */}
           <InputListItem
             // isFirst
             value={lastname}
             onChange={(e) => setLastname(e.target.value)}
-            placeholder="Enter password"
+            placeholder="Enter New Lastname"
             button={false}
-            title="Lastname"
+            title="New"
           />
           {/* </Inputs> */}
         </div>

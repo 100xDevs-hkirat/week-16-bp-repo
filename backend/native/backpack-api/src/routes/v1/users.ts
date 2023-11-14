@@ -5,6 +5,7 @@ import {
   getAddMessage,
   getCreateMessage,
 } from "@coral-xyz/common";
+import { id } from "ethers/lib/utils";
 import type { Request, Response } from "express";
 import express from "express";
 import rateLimit from "express-rate-limit";
@@ -31,6 +32,7 @@ import {
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserProfile,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -108,6 +110,26 @@ router.get("/", extractUserId, async (req, res) => {
   res.json({
     users: usersWithFriendshipMetadata,
   });
+});
+
+router.post("/profile", extractUserId, async (req: Request, res: Response) => {
+  if (req.id) {
+    try {
+      const response = await updateUserProfile({
+        userId: req.id,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+      });
+      console.log(response);
+      return res.json({
+        firstname: response,
+      });
+    } catch (e) {
+      // not able to update user
+    }
+  } else {
+    res.status(404).json({ msg: "User not found" });
+  }
 });
 
 router.get("/jwt/xnft", extractUserId, async (req, res) => {

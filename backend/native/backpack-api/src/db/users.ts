@@ -379,6 +379,42 @@ export const createUser = async (
 };
 
 /**
+ * update user
+ */
+
+export const updateUserProfile = async ({
+  firstname,
+  lastname,
+  userId,
+}: {
+  firstname: string | null;
+  lastname: string | null;
+  userId: string;
+}) => {
+  const response = await chain("mutation")({
+    update_auth_users: [
+      {
+        where: {
+          id: { _eq: userId },
+        },
+        _set: {
+          firstname: firstname,
+          lastname: lastname,
+        },
+      },
+      {
+        returning: {
+          firstname: true,
+          lastname: true,
+        },
+      },
+    ],
+  });
+
+  return response.update_auth_users;
+};
+
+/**
  * Search for users by prefix.
  */
 export async function getUsersByPrefix({
