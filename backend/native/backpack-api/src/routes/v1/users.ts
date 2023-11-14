@@ -5,6 +5,7 @@ import {
   getAddMessage,
   getCreateMessage,
 } from "@coral-xyz/common";
+import { id } from "ethers/lib/utils";
 import type { Request, Response } from "express";
 import express from "express";
 import rateLimit from "express-rate-limit";
@@ -31,6 +32,7 @@ import {
   getUsersByPublicKeys,
   getUsersMetadata,
   updateUserAvatar,
+  updateUserProfile,
 } from "../../db/users";
 import { getOrcreateXnftSecret } from "../../db/xnftSecrets";
 import { logger } from "../../logger";
@@ -110,6 +112,26 @@ router.get("/", extractUserId, async (req, res) => {
   });
 });
 
+router.post("/profile", extractUserId, async (req: Request, res: Response) => {
+  if (req.id) {
+    try {
+      const response = await updateUserProfile({
+        userId: req.id,
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+      });
+      console.log(response);
+      return res.json({
+        firstname: response,
+      });
+    } catch (e) {
+      // not able to update user
+    }
+  } else {
+    res.status(404).json({ msg: "User not found" });
+  }
+});
+
 router.get("/jwt/xnft", extractUserId, async (req, res) => {
   // @ts-ignore
   const uuid = req.id as string;
@@ -124,9 +146,11 @@ router.get("/jwt/xnft", extractUserId, async (req, res) => {
  * Create a new user.
  */
 router.post("/", async (req, res) => {
-  const { username, waitlistId, blockchainPublicKeys } =
+  const { username, firstname, lastname, waitlistId, blockchainPublicKeys } =
     CreateUserWithPublicKeys.parse(req.body);
 
+  console.log(firstname);
+  console.log(lastname);
   // Validate all the signatures
   for (const blockchainPublicKey of blockchainPublicKeys) {
     const signedMessage = getCreateMessage(blockchainPublicKey.publicKey);
@@ -182,6 +206,8 @@ router.post("/", async (req, res) => {
 
   const user = await createUser(
     username,
+    firstname,
+    lastname,
     blockchainPublicKeys.map((b) => ({
       ...b,
       // Cast blockchain to correct type
@@ -231,6 +257,16 @@ router.post("/", async (req, res) => {
   return res.json({ id: user.id, msg: "ok", jwt });
 });
 
+/**
+ * Update user
+ */
+// router.post("/me", extractUserId, async (req: Request, res: Response ) => {
+//   if(req.id){
+//     try {
+
+//     }
+//   }
+// })
 /**
  * Fetches User detail by id
  */

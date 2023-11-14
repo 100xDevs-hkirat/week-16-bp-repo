@@ -12,6 +12,12 @@ export function YourAccount() {
     "Change Password": {
       onClick: () => nav.push("change-password"),
     },
+    "Change Firstname": {
+      onClick: () => nav.push("change-firstname"),
+    },
+    "Change Lastname": {
+      onClick: () => nav.push("change-lastname"),
+    },
     ...(hasMnemonic
       ? {
           "Show Secret Recovery Phrase": {

@@ -13,7 +13,7 @@ import { ContactRequests, Contacts } from "../Messages/Contacts";
 import { Requests } from "../Messages/Requests";
 
 import { CreateMenu } from "./AddConnectWallet/CreateMenu";
-import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic"
+import { CreateMnemonic } from "./AddConnectWallet/CreateMnemonic";
 import { ImportMenu } from "./AddConnectWallet/ImportMenu";
 import { ImportMnemonic } from "./AddConnectWallet/ImportMnemonic";
 import { ImportSecretKey } from "./AddConnectWallet/ImportSecretKey";
@@ -28,6 +28,8 @@ import { PreferenceSolanaCustomRpcUrl } from "./Preferences/Solana/CustomRpcUrl"
 import { PreferencesSolanaExplorer } from "./Preferences/Solana/Explorer";
 import { PreferencesTrustedSites } from "./Preferences/TrustedSites";
 import { XnftDetail } from "./Xnfts/Detail";
+import { ChangeFirstname } from "./YourAccount/ChangeFirstname";
+import { ChangeLastname } from "./YourAccount/ChangeLastname";
 import { ChangePassword } from "./YourAccount/ChangePassword";
 import { RemoveWallet } from "./YourAccount/EditWallets/RemoveWallet";
 import { RenameWallet } from "./YourAccount/EditWallets/RenameWallet";
@@ -151,6 +153,14 @@ export function SettingsNavStackDrawer({
           <NavStackScreen
             name="change-password"
             component={(props: any) => <ChangePassword {...props} />}
+          />
+          <NavStackScreen
+            name="change-firstname"
+            component={(props: any) => <ChangeFirstname {...props} />}
+          />
+          <NavStackScreen
+            name="change-lastname"
+            component={(props: any) => <ChangeLastname {...props} />}
           />
           <NavStackScreen
             name="reset"
