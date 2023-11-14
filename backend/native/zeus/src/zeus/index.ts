@@ -51,7 +51,7 @@ const handleFetchResponse = (response: Response): Promise<GraphQLResponse> => {
         .catch(reject);
     });
   }
-  return response.json();
+  return response.json() as Promise<GraphQLResponse>;
 };
 
 export const apiFetch =
@@ -362,12 +362,17 @@ export const traverseResponse = ({
     ) {
       return o;
     }
-    return Object.fromEntries(
-      Object.entries(o).map(([k, v]) => [
-        k,
-        ibb(k, v, [...p, purifyGraphQLKey(k)]),
-      ])
+    const entries = Object.entries(o).map(
+      ([k, v]) => [k, ibb(k, v, [...p, purifyGraphQLKey(k)])] as const
     );
+    const objectFromEntries = entries.reduce<Record<string, unknown>>(
+      (a, [k, v]) => {
+        a[k] = v;
+        return a;
+      },
+      {}
+    );
+    return objectFromEntries;
   };
   return ibb;
 };
@@ -759,8 +764,8 @@ export const resolverFor = <
     source: any
   ) => Z extends keyof ModelTypes[T]
     ? ModelTypes[T][Z] | Promise<ModelTypes[T][Z]> | X
-    : any
-) => fn as (args?: any, source?: any) => any;
+    : never
+) => fn as (args?: any, source?: any) => ReturnType<typeof fn>;
 
 export type UnwrapPromise<T> = T extends Promise<infer R> ? R : T;
 export type ZeusState<T extends (...args: any[]) => Promise<any>> = NonNullable<
@@ -816,9 +821,13 @@ type IsInterfaced<
                 : DST[P],
               SCLR
             >
-          : Record<string, unknown>
+          : IsArray<
+              R,
+              "__typename" extends keyof DST ? { __typename: true } : never,
+              SCLR
+            >
         : never;
-    }[keyof DST] & {
+    }[keyof SRC] & {
       [P in keyof Omit<
         Pick<
           SRC,
@@ -4033,9 +4042,11 @@ export type ValueTypes = {
       },
       ValueTypes["auth_public_keys"]
     ];
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
     /** An object relationship */
     invitation?: ValueTypes["auth_invitations"];
+    lastname?: boolean | `@${string}`;
     public_keys?: [
       {
         /** distinct select on columns */
@@ -4272,6 +4283,11 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["String_comparison_exp"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?:
       | ValueTypes["uuid_comparison_exp"]
       | undefined
@@ -4279,6 +4295,11 @@ export type ValueTypes = {
       | Variable<any, string>;
     invitation?:
       | ValueTypes["auth_invitations_bool_exp"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    lastname?:
+      | ValueTypes["String_comparison_exp"]
       | undefined
       | null
       | Variable<any, string>;
@@ -4317,6 +4338,7 @@ export type ValueTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined | null | Variable<any, string>;
     invitation?:
       | ValueTypes["auth_invitations_obj_rel_insert_input"]
       | undefined
@@ -4327,6 +4349,7 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
     public_keys?:
       | ValueTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined
@@ -4349,7 +4372,9 @@ export type ValueTypes = {
   /** aggregate max on columns */
   ["auth_users_max_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
@@ -4360,7 +4385,17 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?: ValueTypes["order_by"] | undefined | null | Variable<any, string>;
+    lastname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     username?:
       | ValueTypes["order_by"]
       | undefined
@@ -4370,7 +4405,9 @@ export type ValueTypes = {
   /** aggregate min on columns */
   ["auth_users_min_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
@@ -4381,7 +4418,17 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?: ValueTypes["order_by"] | undefined | null | Variable<any, string>;
+    lastname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     username?:
       | ValueTypes["order_by"]
       | undefined
@@ -4430,9 +4477,19 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?:
+      | ValueTypes["order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
     id?: ValueTypes["order_by"] | undefined | null | Variable<any, string>;
     invitation?:
       | ValueTypes["auth_invitations_order_by"]
+      | undefined
+      | null
+      | Variable<any, string>;
+    lastname?:
+      | ValueTypes["order_by"]
       | undefined
       | null
       | Variable<any, string>;
@@ -4470,6 +4527,8 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?: string | undefined | null | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
     updated_at?:
       | ValueTypes["timestamptz"]
       | undefined
@@ -4496,7 +4555,9 @@ export type ValueTypes = {
       | undefined
       | null
       | Variable<any, string>;
+    firstname?: string | undefined | null | Variable<any, string>;
     id?: ValueTypes["uuid"] | undefined | null | Variable<any, string>;
+    lastname?: string | undefined | null | Variable<any, string>;
     username?: ValueTypes["citext"] | undefined | null | Variable<any, string>;
   };
   /** update columns of table "auth.users" */
@@ -10898,9 +10959,11 @@ export type ResolverInputTypes = {
       },
       ResolverInputTypes["auth_public_keys"]
     ];
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
     /** An object relationship */
     invitation?: ResolverInputTypes["auth_invitations"];
+    lastname?: boolean | `@${string}`;
     public_keys?: [
       {
         /** distinct select on columns */
@@ -11069,11 +11132,13 @@ export type ResolverInputTypes = {
       | ResolverInputTypes["auth_public_keys_bool_exp"]
       | undefined
       | null;
+    firstname?: ResolverInputTypes["String_comparison_exp"] | undefined | null;
     id?: ResolverInputTypes["uuid_comparison_exp"] | undefined | null;
     invitation?:
       | ResolverInputTypes["auth_invitations_bool_exp"]
       | undefined
       | null;
+    lastname?: ResolverInputTypes["String_comparison_exp"] | undefined | null;
     public_keys?:
       | ResolverInputTypes["auth_public_keys_bool_exp"]
       | undefined
@@ -11097,11 +11162,13 @@ export type ResolverInputTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined | null;
     invitation?:
       | ResolverInputTypes["auth_invitations_obj_rel_insert_input"]
       | undefined
       | null;
     invitation_id?: ResolverInputTypes["uuid"] | undefined | null;
+    lastname?: string | undefined | null;
     public_keys?:
       | ResolverInputTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined
@@ -11121,27 +11188,35 @@ export type ResolverInputTypes = {
   /** aggregate max on columns */
   ["auth_users_max_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** order by max() on columns of table "auth.users" */
   ["auth_users_max_order_by"]: {
     created_at?: ResolverInputTypes["order_by"] | undefined | null;
+    firstname?: ResolverInputTypes["order_by"] | undefined | null;
     id?: ResolverInputTypes["order_by"] | undefined | null;
+    lastname?: ResolverInputTypes["order_by"] | undefined | null;
     username?: ResolverInputTypes["order_by"] | undefined | null;
   };
   /** aggregate min on columns */
   ["auth_users_min_fields"]: AliasType<{
     created_at?: boolean | `@${string}`;
+    firstname?: boolean | `@${string}`;
     id?: boolean | `@${string}`;
+    lastname?: boolean | `@${string}`;
     username?: boolean | `@${string}`;
     __typename?: boolean | `@${string}`;
   }>;
   /** order by min() on columns of table "auth.users" */
   ["auth_users_min_order_by"]: {
     created_at?: ResolverInputTypes["order_by"] | undefined | null;
+    firstname?: ResolverInputTypes["order_by"] | undefined | null;
     id?: ResolverInputTypes["order_by"] | undefined | null;
+    lastname?: ResolverInputTypes["order_by"] | undefined | null;
     username?: ResolverInputTypes["order_by"] | undefined | null;
   };
   /** response of any mutation on the table "auth.users" */
@@ -11174,11 +11249,13 @@ export type ResolverInputTypes = {
       | ResolverInputTypes["auth_public_keys_aggregate_order_by"]
       | undefined
       | null;
+    firstname?: ResolverInputTypes["order_by"] | undefined | null;
     id?: ResolverInputTypes["order_by"] | undefined | null;
     invitation?:
       | ResolverInputTypes["auth_invitations_order_by"]
       | undefined
       | null;
+    lastname?: ResolverInputTypes["order_by"] | undefined | null;
     public_keys_aggregate?:
       | ResolverInputTypes["auth_public_keys_aggregate_order_by"]
       | undefined
@@ -11199,6 +11276,8 @@ export type ResolverInputTypes = {
   /** input type for updating data in table "auth.users" */
   ["auth_users_set_input"]: {
     avatar_nft?: ResolverInputTypes["citext"] | undefined | null;
+    firstname?: string | undefined | null;
+    lastname?: string | undefined | null;
     updated_at?: ResolverInputTypes["timestamptz"] | undefined | null;
   };
   /** Streaming cursor of the table "auth_users" */
@@ -11211,7 +11290,9 @@ export type ResolverInputTypes = {
   /** Initial value of the column from where the streaming should start */
   ["auth_users_stream_cursor_value_input"]: {
     created_at?: ResolverInputTypes["timestamptz"] | undefined | null;
+    firstname?: string | undefined | null;
     id?: ResolverInputTypes["uuid"] | undefined | null;
+    lastname?: string | undefined | null;
     username?: ResolverInputTypes["citext"] | undefined | null;
   };
   /** update columns of table "auth.users" */
@@ -15978,9 +16059,11 @@ export type ModelTypes = {
     created_at: ModelTypes["timestamptz"];
     /** the user's first solana public key inside an array due to hasura limitation */
     dropzone_public_key?: Array<ModelTypes["auth_public_keys"]> | undefined;
+    firstname?: string | undefined;
     id: ModelTypes["uuid"];
     /** An object relationship */
     invitation: ModelTypes["auth_invitations"];
+    lastname?: string | undefined;
     /** An array relationship */
     public_keys: Array<ModelTypes["auth_public_keys"]>;
     /** An aggregate relationship */
@@ -16032,8 +16115,10 @@ export type ModelTypes = {
     _or?: Array<ModelTypes["auth_users_bool_exp"]> | undefined;
     created_at?: ModelTypes["timestamptz_comparison_exp"] | undefined;
     dropzone_public_key?: ModelTypes["auth_public_keys_bool_exp"] | undefined;
+    firstname?: ModelTypes["String_comparison_exp"] | undefined;
     id?: ModelTypes["uuid_comparison_exp"] | undefined;
     invitation?: ModelTypes["auth_invitations_bool_exp"] | undefined;
+    lastname?: ModelTypes["String_comparison_exp"] | undefined;
     public_keys?: ModelTypes["auth_public_keys_bool_exp"] | undefined;
     public_keys_aggregate?:
       | ModelTypes["auth_public_keys_aggregate_bool_exp"]
@@ -16048,10 +16133,12 @@ export type ModelTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined;
     invitation?:
       | ModelTypes["auth_invitations_obj_rel_insert_input"]
       | undefined;
     invitation_id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     public_keys?:
       | ModelTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined;
@@ -16064,25 +16151,33 @@ export type ModelTypes = {
   /** aggregate max on columns */
   ["auth_users_max_fields"]: {
     created_at?: ModelTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: ModelTypes["citext"] | undefined;
   };
   /** order by max() on columns of table "auth.users" */
   ["auth_users_max_order_by"]: {
     created_at?: ModelTypes["order_by"] | undefined;
+    firstname?: ModelTypes["order_by"] | undefined;
     id?: ModelTypes["order_by"] | undefined;
+    lastname?: ModelTypes["order_by"] | undefined;
     username?: ModelTypes["order_by"] | undefined;
   };
   /** aggregate min on columns */
   ["auth_users_min_fields"]: {
     created_at?: ModelTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: ModelTypes["citext"] | undefined;
   };
   /** order by min() on columns of table "auth.users" */
   ["auth_users_min_order_by"]: {
     created_at?: ModelTypes["order_by"] | undefined;
+    firstname?: ModelTypes["order_by"] | undefined;
     id?: ModelTypes["order_by"] | undefined;
+    lastname?: ModelTypes["order_by"] | undefined;
     username?: ModelTypes["order_by"] | undefined;
   };
   /** response of any mutation on the table "auth.users" */
@@ -16110,8 +16205,10 @@ export type ModelTypes = {
     dropzone_public_key_aggregate?:
       | ModelTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
+    firstname?: ModelTypes["order_by"] | undefined;
     id?: ModelTypes["order_by"] | undefined;
     invitation?: ModelTypes["auth_invitations_order_by"] | undefined;
+    lastname?: ModelTypes["order_by"] | undefined;
     public_keys_aggregate?:
       | ModelTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
@@ -16129,6 +16226,8 @@ export type ModelTypes = {
   /** input type for updating data in table "auth.users" */
   ["auth_users_set_input"]: {
     avatar_nft?: ModelTypes["citext"] | undefined;
+    firstname?: string | undefined;
+    lastname?: string | undefined;
     updated_at?: ModelTypes["timestamptz"] | undefined;
   };
   /** Streaming cursor of the table "auth_users" */
@@ -16141,7 +16240,9 @@ export type ModelTypes = {
   /** Initial value of the column from where the streaming should start */
   ["auth_users_stream_cursor_value_input"]: {
     created_at?: ModelTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: ModelTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: ModelTypes["citext"] | undefined;
   };
   ["auth_users_update_column"]: auth_users_update_column;
@@ -18876,9 +18977,11 @@ export type GraphQLTypes = {
     created_at: GraphQLTypes["timestamptz"];
     /** the user's first solana public key inside an array due to hasura limitation */
     dropzone_public_key?: Array<GraphQLTypes["auth_public_keys"]> | undefined;
+    firstname?: string | undefined;
     id: GraphQLTypes["uuid"];
     /** An object relationship */
     invitation: GraphQLTypes["auth_invitations"];
+    lastname?: string | undefined;
     /** An array relationship */
     public_keys: Array<GraphQLTypes["auth_public_keys"]>;
     /** An aggregate relationship */
@@ -18932,8 +19035,10 @@ export type GraphQLTypes = {
     _or?: Array<GraphQLTypes["auth_users_bool_exp"]> | undefined;
     created_at?: GraphQLTypes["timestamptz_comparison_exp"] | undefined;
     dropzone_public_key?: GraphQLTypes["auth_public_keys_bool_exp"] | undefined;
+    firstname?: GraphQLTypes["String_comparison_exp"] | undefined;
     id?: GraphQLTypes["uuid_comparison_exp"] | undefined;
     invitation?: GraphQLTypes["auth_invitations_bool_exp"] | undefined;
+    lastname?: GraphQLTypes["String_comparison_exp"] | undefined;
     public_keys?: GraphQLTypes["auth_public_keys_bool_exp"] | undefined;
     public_keys_aggregate?:
       | GraphQLTypes["auth_public_keys_aggregate_bool_exp"]
@@ -18949,10 +19054,12 @@ export type GraphQLTypes = {
   ["auth_users_constraint"]: auth_users_constraint;
   /** input type for inserting data into table "auth.users" */
   ["auth_users_insert_input"]: {
+    firstname?: string | undefined;
     invitation?:
       | GraphQLTypes["auth_invitations_obj_rel_insert_input"]
       | undefined;
     invitation_id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     public_keys?:
       | GraphQLTypes["auth_public_keys_arr_rel_insert_input"]
       | undefined;
@@ -18968,26 +19075,34 @@ export type GraphQLTypes = {
   ["auth_users_max_fields"]: {
     __typename: "auth_users_max_fields";
     created_at?: GraphQLTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: GraphQLTypes["citext"] | undefined;
   };
   /** order by max() on columns of table "auth.users" */
   ["auth_users_max_order_by"]: {
     created_at?: GraphQLTypes["order_by"] | undefined;
+    firstname?: GraphQLTypes["order_by"] | undefined;
     id?: GraphQLTypes["order_by"] | undefined;
+    lastname?: GraphQLTypes["order_by"] | undefined;
     username?: GraphQLTypes["order_by"] | undefined;
   };
   /** aggregate min on columns */
   ["auth_users_min_fields"]: {
     __typename: "auth_users_min_fields";
     created_at?: GraphQLTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: GraphQLTypes["citext"] | undefined;
   };
   /** order by min() on columns of table "auth.users" */
   ["auth_users_min_order_by"]: {
     created_at?: GraphQLTypes["order_by"] | undefined;
+    firstname?: GraphQLTypes["order_by"] | undefined;
     id?: GraphQLTypes["order_by"] | undefined;
+    lastname?: GraphQLTypes["order_by"] | undefined;
     username?: GraphQLTypes["order_by"] | undefined;
   };
   /** response of any mutation on the table "auth.users" */
@@ -19016,8 +19131,10 @@ export type GraphQLTypes = {
     dropzone_public_key_aggregate?:
       | GraphQLTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
+    firstname?: GraphQLTypes["order_by"] | undefined;
     id?: GraphQLTypes["order_by"] | undefined;
     invitation?: GraphQLTypes["auth_invitations_order_by"] | undefined;
+    lastname?: GraphQLTypes["order_by"] | undefined;
     public_keys_aggregate?:
       | GraphQLTypes["auth_public_keys_aggregate_order_by"]
       | undefined;
@@ -19036,6 +19153,8 @@ export type GraphQLTypes = {
   /** input type for updating data in table "auth.users" */
   ["auth_users_set_input"]: {
     avatar_nft?: GraphQLTypes["citext"] | undefined;
+    firstname?: string | undefined;
+    lastname?: string | undefined;
     updated_at?: GraphQLTypes["timestamptz"] | undefined;
   };
   /** Streaming cursor of the table "auth_users" */
@@ -19048,7 +19167,9 @@ export type GraphQLTypes = {
   /** Initial value of the column from where the streaming should start */
   ["auth_users_stream_cursor_value_input"]: {
     created_at?: GraphQLTypes["timestamptz"] | undefined;
+    firstname?: string | undefined;
     id?: GraphQLTypes["uuid"] | undefined;
+    lastname?: string | undefined;
     username?: GraphQLTypes["citext"] | undefined;
   };
   /** update columns of table "auth.users" */
@@ -20330,12 +20451,16 @@ export const enum auth_users_constraint {
 /** select columns of table "auth.users" */
 export const enum auth_users_select_column {
   created_at = "created_at",
+  firstname = "firstname",
   id = "id",
+  lastname = "lastname",
   username = "username",
 }
 /** update columns of table "auth.users" */
 export const enum auth_users_update_column {
   avatar_nft = "avatar_nft",
+  firstname = "firstname",
+  lastname = "lastname",
   updated_at = "updated_at",
 }
 /** unique or primary key constraints on table "auth.xnft_preferences" */
