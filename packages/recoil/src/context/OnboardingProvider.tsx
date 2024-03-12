@@ -81,6 +81,8 @@ export type OnboardingData = {
   complete: boolean;
   inviteCode: string | undefined;
   username: string | null;
+  firstname: string | null;
+  lastname: string | null;
   action: string;
   keyringType: KeyringType | null;
   blockchain: Blockchain | null;
@@ -102,6 +104,8 @@ const defaultState = {
   complete: false,
   inviteCode: undefined,
   username: null,
+  firstname: null,
+  lastname: null,
   action: "create",
   keyringType: null,
   blockchain: null,

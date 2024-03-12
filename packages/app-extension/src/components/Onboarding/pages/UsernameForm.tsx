@@ -1,5 +1,5 @@
 import { type FormEvent, useCallback, useEffect, useState } from "react";
-import { PrimaryButton,TextInput } from "@coral-xyz/react-common";
+import { PrimaryButton, TextInput } from "@coral-xyz/react-common";
 import { useCustomTheme } from "@coral-xyz/themes";
 import { AlternateEmail } from "@mui/icons-material";
 import { Box, InputAdornment } from "@mui/material";
@@ -11,9 +11,11 @@ export const UsernameForm = ({
   onNext,
 }: {
   inviteCode: string;
-  onNext: (username: string) => void;
+  onNext: (username: string, firstname: string, lastname: string) => void;
 }) => {
   const [username, setUsername] = useState("");
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
   const [error, setError] = useState("");
   const theme = useCustomTheme();
 
@@ -26,20 +28,20 @@ export const UsernameForm = ({
       e.preventDefault();
 
       try {
-        const res = await fetch(`https://auth.xnfts.dev/users/${username}`, {
-          headers: {
-            "x-backpack-invite-code": String(inviteCode),
-          },
-        });
-        const json = await res.json();
-        if (!res.ok) throw new Error(json.message || "There was an error");
+        // const res = await fetch(`https://auth.xnfts.dev/users/${username}`, {
+        //   headers: {
+        //     "x-backpack-invite-code": String(inviteCode),
+        //   },
+        // });
+        // const json = await res.json();
+        // if (!res.ok) throw new Error(json.message || "There was an error");
 
-        onNext(username);
+        onNext(username, firstName, lastName);
       } catch (err: any) {
         setError(err.message);
       }
     },
-    [username]
+    [username, firstName, lastName]
   );
 
   return (
@@ -105,7 +107,71 @@ export const UsernameForm = ({
             }
           />
         </Box>
-        <PrimaryButton label="Continue" type="submit" />
+        <Box style={{ marginBottom: "2px" }}>
+          <TextInput
+            inputProps={{
+              name: "firstname",
+              autoComplete: "off",
+              spellCheck: "false",
+              autoFocus: true,
+            }}
+            placeholder="First Name"
+            type="text"
+            value={firstName}
+            setValue={(e) => {
+              setFirstName(e.target.value);
+            }}
+            error={error ? true : false}
+            errorMessage={error}
+            startAdornment={
+              <InputAdornment position="start">
+                <AlternateEmail
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+        </Box>
+        <Box style={{ marginBottom: "2px" }}>
+          <TextInput
+            inputProps={{
+              name: "lastname",
+              autoComplete: "off",
+              spellCheck: "false",
+              autoFocus: true,
+            }}
+            placeholder="Last Name"
+            type="text"
+            value={lastName}
+            setValue={(e) => {
+              setLastName(e.target.value);
+            }}
+            error={error ? true : false}
+            errorMessage={error}
+            startAdornment={
+              <InputAdornment position="start">
+                <AlternateEmail
+                  style={{
+                    color: theme.custom.colors.secondary,
+                    fontSize: 18,
+                    marginRight: -2,
+                    userSelect: "none",
+                  }}
+                />
+              </InputAdornment>
+            }
+          />
+        </Box>
+        <PrimaryButton
+          label="Continue"
+          type="submit"
+          style={{ marginBottom: "16px" }}
+        />
       </Box>
     </form>
   );
